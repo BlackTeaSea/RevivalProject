@@ -16,6 +16,7 @@ public class Resurrect implements Listener {
 
             //Changes Gamemode for player
             data.getJavaPlugin().getServer().dispatchCommand(server, "gamemode survival " + playername);
+            data.removePlayer(data.getPlayerList().get(0));
         }
     }
 }
