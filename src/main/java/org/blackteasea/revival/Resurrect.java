@@ -11,6 +11,7 @@ import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
@@ -40,18 +41,17 @@ public class Resurrect implements Listener {
     public void initializeItems() {
         // Add the items to the inventory
         for (Player player : data.getPlayerList()) {
-            inv.addItem(createGUIItem(Material.TOTEM_OF_UNDYING, "Revive the player", player.getName()));
+            inv.addItem(createSkullItem(player,"Revive the player", player.getName()));
         }
     }
 
-    public @NotNull ItemStack createGUIItem(final Material material, final String name, final String... lore) {
-        final ItemStack item = new ItemStack(material, 1);
-        final ItemMeta meta = item.getItemMeta();
-        meta.setDisplayName(name);
-        meta.setLore(Arrays.asList(lore));
-        item.setItemMeta(meta);
-
-        return item;
+    public @NotNull ItemStack createSkullItem(Player player, final String name, final String... lore) {
+        final ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1);
+        final SkullMeta meta = (SkullMeta) skull.getItemMeta();
+        meta.setOwningPlayer(player);
+        skull.setItemMeta(meta);
+        skull.setLore(Arrays.asList(lore));
+        return skull;
     }
 
     public void openInventory(final HumanEntity e) {
@@ -70,7 +70,6 @@ public class Resurrect implements Listener {
 
         // Get the server console
         CommandSender server = Data.getInstance().getJavaPlugin().getServer().getConsoleSender();
-        if (clickedItem.getItemMeta().getDisplayName().equals("Revive the player")) {
             resurrectee = clickedItem.getItemMeta().getLore().get(0);
             data.getJavaPlugin().getServer().dispatchCommand(server, "gamemode survival " + resurrectee);
             for (Player player : data.getPlayerList()) {
@@ -79,8 +78,6 @@ public class Resurrect implements Listener {
                     inv.remove(clickedItem);
                 }
             }
-        } else {
-        }
 
     }
 
