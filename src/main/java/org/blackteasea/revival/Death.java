@@ -11,10 +11,6 @@ public class Death implements Listener {
     public void uponDeath(PlayerDeathEvent event) {
         Data data = Data.getInstance();
         Player player = event.getPlayer();
-        final Component message = Component.text(
-                "OHHHHH NOOOOOOOO! " + player.getName() +
-                        " seems to have had his mortal string cut. How unfortunate.");
-        Data.getInstance().getJavaPlugin().getServer().broadcast(message);
         data.getJavaPlugin().getLogger().info(player.getName() + " has died and will come back!");
         if (!data.getPlayerList().contains(player)) {
             data.addPlayer(player);
