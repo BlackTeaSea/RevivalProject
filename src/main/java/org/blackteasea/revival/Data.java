@@ -43,4 +43,6 @@ public class Data extends PropertyChangeSupport {
     public List<Player> getPlayerList(){
         return this.playerList;
     }
+
+
 }
