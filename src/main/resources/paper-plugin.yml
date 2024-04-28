@@ -1,0 +1,4 @@
+name: Revival
+version: '${project.version}'
+main: org.blackteasea.revival.Revival
+api-version: '1.20'
