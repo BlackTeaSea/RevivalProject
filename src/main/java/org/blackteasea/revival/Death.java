@@ -19,6 +19,7 @@ public class Death implements Listener {
             data.addPlayer(player);
         }
 
+
     }
 
 

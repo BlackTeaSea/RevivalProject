@@ -28,22 +28,18 @@ import static org.bukkit.Bukkit.createInventory;
 import static org.bukkit.Bukkit.getOfflinePlayer;
 
 public class Resurrect implements Listener {
-    private final Inventory inv;
-
-    //Constructor
-    public Resurrect() {
-        //GUI scheme
-        inv = createInventory(null, 9, "Resurrect");
-    }
 
     @EventHandler
     public void dropTotem(PlayerDropItemEvent event) {
         // If the item dropped is a Totem of Undying
         if (event.getItemDrop().getName().equals("Totem of Undying")) {
-
-            Data.getInstance().setDropEvent(event);
-            openInventory(event.getPlayer());
-            initializeItems();
+            Data.getInstance().getJavaPlugin().getServer().getScheduler().runTaskLater(Data.getInstance().getJavaPlugin(), () -> {
+                if (event.getItemDrop().getLocation().getBlock().getType() == Material.WATER){
+                    Data.getInstance().setDropEvent(event);
+                    Inv.openInventory(event.getPlayer());
+                    initializeItems();
+                }
+            }, 20L);
 
         }
 
@@ -52,27 +48,11 @@ public class Resurrect implements Listener {
     public void initializeItems() {
         // Add the items to the inventory
         for (Player player : Data.getInstance().getPlayerList()) {
-            inv.addItem(createSkullItem(player, player.getName()));
+            Inventory inv = Data.getInstance().getInventory();
+            inv.addItem(Inv.createSkullItem(player, player.getName()));
         }
     }
 
-    public void openInventory(final HumanEntity e) {
-        e.openInventory(inv);
-    }
-    public void closeInventory(final HumanEntity e){
-        e.closeInventory();
-    }
-
-    //Skullwork
-
-    public @NotNull ItemStack createSkullItem(Player player, final String... lore) {
-        final ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1);
-        final SkullMeta meta = (SkullMeta) skull.getItemMeta();
-        meta.setOwningPlayer(player);
-        skull.setItemMeta(meta);
-        skull.setLore(Arrays.asList(lore));
-        return skull;
-    }
 
     //GUI
     @EventHandler
@@ -81,7 +61,7 @@ public class Resurrect implements Listener {
         HumanEntity user = e.getWhoClicked();
         ForwardingAudience audience = Bukkit.getServer();
         Sound revive = Sound.sound(Key.key("block.end_portal.spawn"), Sound.Source.NEUTRAL, 1f, 1f);
-
+        Inventory inv = Data.getInstance().getInventory();
 
         if (!e.getInventory().equals(inv)) return;
 
@@ -117,7 +97,7 @@ public class Resurrect implements Listener {
             }
         }
         //Close inventory for the person who clicked
-        closeInventory(e.getWhoClicked());
+        Inv.closeInventory(e.getWhoClicked());
 
 
 

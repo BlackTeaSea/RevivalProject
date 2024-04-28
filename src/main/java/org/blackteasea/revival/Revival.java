@@ -14,6 +14,7 @@ public final class Revival extends JavaPlugin {
         getServer().getPluginManager().registerEvents(new Death(), this);
         getServer().getPluginManager().registerEvents(new Resurrect(), this);
         getServer().getWorlds().forEach(world -> world.setGameRuleValue("sendCommandFeedback", "false"));
+        getServer().getWorlds().forEach(world -> world.setGameRuleValue("doImmediateDeath", "false"));
         getLogger().info("Command feedback is now off");
     }
 
