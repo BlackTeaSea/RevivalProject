@@ -1,6 +1,7 @@
 package org.blackteasea.revival;
 
 
+import org.bukkit.command.PluginCommand;
 import org.bukkit.plugin.java.JavaPlugin;
 
 public final class Revival extends JavaPlugin {
@@ -12,6 +13,7 @@ public final class Revival extends JavaPlugin {
         getLogger().info("Starting The Revival Project");
         getServer().getPluginManager().registerEvents(new Death(), this);
         getServer().getPluginManager().registerEvents(new BasicListener(), this);
+        getServer().getPluginManager().registerEvents(new Resurrect(), this);
     }
 
     @Override
