@@ -10,7 +10,6 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
@@ -19,15 +18,10 @@ import java.util.Arrays;
 import static org.bukkit.Bukkit.createInventory;
 
 public class Resurrect implements Listener {
-    private final Data data;
     private final Inventory inv;
-
-    private String resurrectee;
 
     //Constructor
     public Resurrect() {
-        //data singleton
-        data = Data.getInstance();
         //GUI scheme
         inv = createInventory(null, 9, "Resurrect");
     }
@@ -44,7 +38,7 @@ public class Resurrect implements Listener {
 
     public void initializeItems() {
         // Add the items to the inventory
-        for (Player player : data.getPlayerList()) {
+        for (Player player : Data.getInstance().getPlayerList()) {
             inv.addItem(createSkullItem(player,"Revive the player", player.getName()));
         }
     }
@@ -76,13 +70,13 @@ public class Resurrect implements Listener {
         if (clickedItem == null || clickedItem.getType().isAir()) return;
 
         // Get the server console
-        CommandSender server = Data.getInstance().getJavaPlugin().getServer().getConsoleSender();
-        resurrectee = clickedItem.getItemMeta().getLore().get(0);
-        data.getJavaPlugin().getServer().dispatchCommand(server, "gamemode survival " + resurrectee);
-        data.getJavaPlugin().getServer().dispatchCommand(server, "");
-        for (Player player : data.getPlayerList()) {
+        CommandSender server = Data.getInstance().getInstance().getJavaPlugin().getServer().getConsoleSender();
+        String resurrectee = clickedItem.getItemMeta().getLore().get(0);
+        Data.getInstance().getJavaPlugin().getServer().dispatchCommand(server, "gamemode survival " + resurrectee);
+        Data.getInstance().getJavaPlugin().getServer().dispatchCommand(server, "");
+        for (Player player : Data.getInstance().getPlayerList()) {
             if (player.getName().equals(resurrectee)) {
-                data.removePlayer(player);
+                Data.getInstance().removePlayer(player);
                 inv.remove(clickedItem);
             }
         }
@@ -91,3 +85,5 @@ public class Resurrect implements Listener {
 
 
 }
+
+
