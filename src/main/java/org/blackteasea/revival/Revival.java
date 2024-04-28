@@ -11,6 +11,7 @@ public final class Revival extends JavaPlugin {
         Data.getInstance().setJavaPlugin(this);
         getLogger().info("Starting The Revival Project");
         getServer().getPluginManager().registerEvents(new Death(), this);
+        getServer().getPluginManager().registerEvents(new BasicListener(), this);
     }
 
     @Override
