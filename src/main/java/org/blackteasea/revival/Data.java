@@ -1,16 +1,20 @@
 package org.blackteasea.revival;
 
-import org.bukkit.command.CommandSender;
+import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.beans.PropertyChangeSupport;
-import java.util.logging.Logger;
+import java.util.ArrayList;
+import java.util.List;
 
 public class Data extends PropertyChangeSupport {
     private static Data instance;
     private JavaPlugin plugin;
+
+    private List<Player> playerList;
     private Data() {
         super(new Object());
+        playerList = new ArrayList<>();
     }
 
     public static Data getInstance(){
@@ -26,5 +30,17 @@ public class Data extends PropertyChangeSupport {
 
     public JavaPlugin getJavaPlugin() {
         return plugin;
+    }
+
+    public void addPlayer(Player player){
+        this.playerList.add(player);
+    }
+
+    public void removePlayer(Player player){
+        this.playerList.remove(player);
+    }
+
+    public List<Player> getPlayerList(){
+        return this.playerList;
     }
 }
