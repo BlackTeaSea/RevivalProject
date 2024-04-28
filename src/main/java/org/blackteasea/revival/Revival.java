@@ -7,6 +7,7 @@ public final class Revival extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
+        System.out.println("This is the start of the revival project");
 
     }
 
