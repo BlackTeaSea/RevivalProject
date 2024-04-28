@@ -16,7 +16,9 @@ public class Death implements Listener {
                         " seems to have had his mortal string cut. How unfortunate.");
         Data.getInstance().getJavaPlugin().getServer().broadcast(message);
         data.getJavaPlugin().getLogger().info(player.getName() + " has died and will come back!");
-        data.addPlayer(player);
+        if (!data.getPlayerList().contains(player)) {
+            data.addPlayer(player);
+        }
     }
 
 
