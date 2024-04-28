@@ -4,8 +4,9 @@
     <option name="autoReloadType" value="SELECTIVE" />
   </component>
   <component name="ChangeListManager">
-    <list default="true" id="18173fd9-9949-4408-b164-b29dbda5cc5b" name="Changes" comment="Added small test">
-      <change beforePath="$PROJECT_DIR$/src/main/java/org/blackteasea/revival/Revival.java" beforeDir="false" afterPath="$PROJECT_DIR$/src/main/java/org/blackteasea/revival/Revival.java" afterDir="false" />
+    <list default="true" id="18173fd9-9949-4408-b164-b29dbda5cc5b" name="Changes" comment="Nothing new">
+      <change beforePath="$PROJECT_DIR$/.gitignore" beforeDir="false" afterPath="$PROJECT_DIR$/.gitignore" afterDir="false" />
+      <change beforePath="$PROJECT_DIR$/.idea/workspace.xml" beforeDir="false" afterPath="$PROJECT_DIR$/.idea/workspace.xml" afterDir="false" />
     </list>
     <option name="SHOW_DIALOG" value="false" />
     <option name="HIGHLIGHT_CONFLICTS" value="true" />
@@ -91,7 +92,7 @@
       <option name="number" value="Default" />
       <option name="presentableId" value="Default" />
       <updated>1714270188641</updated>
-      <workItem from="1714270189800" duration="1005000" />
+      <workItem from="1714270189800" duration="1602000" />
     </task>
     <task id="LOCAL-00001" summary="Made things">
       <option name="closed" value="true" />
@@ -125,7 +126,15 @@
       <option name="project" value="LOCAL" />
       <updated>1714270546591</updated>
     </task>
-    <option name="localTasksCounter" value="5" />
+    <task id="LOCAL-00005" summary="Nothing new">
+      <option name="closed" value="true" />
+      <created>1714271627377</created>
+      <option name="number" value="00005" />
+      <option name="presentableId" value="LOCAL-00005" />
+      <option name="project" value="LOCAL" />
+      <updated>1714271627377</updated>
+    </task>
+    <option name="localTasksCounter" value="6" />
     <servers />
   </component>
   <component name="TypeScriptGeneratedFilesManager">
@@ -134,6 +143,7 @@
   <component name="VcsManagerConfiguration">
     <MESSAGE value="Made things" />
     <MESSAGE value="Added small test" />
-    <option name="LAST_COMMIT_MESSAGE" value="Added small test" />
+    <MESSAGE value="Nothing new" />
+    <option name="LAST_COMMIT_MESSAGE" value="Nothing new" />
   </component>
 </project>
