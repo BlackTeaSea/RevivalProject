@@ -1,5 +1,6 @@
 package org.blackteasea.revival;
 
+import org.bukkit.command.CommandSender;
 import org.bukkit.plugin.java.JavaPlugin;
 
 import java.beans.PropertyChangeSupport;
