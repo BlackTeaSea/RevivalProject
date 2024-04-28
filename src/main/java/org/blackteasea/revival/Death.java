@@ -8,7 +8,7 @@ import org.bukkit.event.entity.PlayerDeathEvent;
 
 public class Death implements Listener {
     @EventHandler
-    public void uponDeath(PlayerDeathEvent event){
+    public void uponDeath(PlayerDeathEvent event) {
         Data data = Data.getInstance();
         Player player = event.getPlayer();
         final Component message = Component.text(

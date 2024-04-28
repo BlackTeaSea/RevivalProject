@@ -11,36 +11,37 @@ public class Data extends PropertyChangeSupport {
     private static Data instance;
     private JavaPlugin plugin;
 
-    private List<Player> playerList;
+    private final List<Player> playerList;
+
     private Data() {
         super(new Object());
         playerList = new ArrayList<>();
     }
 
-    public static Data getInstance(){
-        if (instance == null){
+    public static Data getInstance() {
+        if (instance == null) {
             instance = new Data();
         }
         return instance;
-    }
-
-    public void setJavaPlugin(JavaPlugin plugin){
-        this.plugin = plugin;
     }
 
     public JavaPlugin getJavaPlugin() {
         return plugin;
     }
 
-    public void addPlayer(Player player){
+    public void setJavaPlugin(JavaPlugin plugin) {
+        this.plugin = plugin;
+    }
+
+    public void addPlayer(Player player) {
         this.playerList.add(player);
     }
 
-    public void removePlayer(Player player){
+    public void removePlayer(Player player) {
         this.playerList.remove(player);
     }
 
-    public List<Player> getPlayerList(){
+    public List<Player> getPlayerList() {
         return this.playerList;
     }
 
