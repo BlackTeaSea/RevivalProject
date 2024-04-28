@@ -7,8 +7,8 @@ public final class Revival extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
-        Data.getInstance().setLogger(getLogger());
-        getLogger().info("Hello from Revival");
+        Data.getInstance().setJavaPlugin(this);
+        getLogger().info("Starting The Revival Project");
         getServer().getPluginManager().registerEvents(new Death(), this);
     }
 

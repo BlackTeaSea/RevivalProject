@@ -1,11 +1,13 @@
 package org.blackteasea.revival;
 
+import org.bukkit.plugin.java.JavaPlugin;
+
 import java.beans.PropertyChangeSupport;
 import java.util.logging.Logger;
 
 public class Data extends PropertyChangeSupport {
     private static Data instance;
-    private Logger logger;
+    private JavaPlugin plugin;
     private Data() {
         super(new Object());
     }
@@ -17,11 +19,11 @@ public class Data extends PropertyChangeSupport {
         return instance;
     }
 
-    public void setLogger(Logger logger){
-        this.logger = logger;
+    public void setJavaPlugin(JavaPlugin plugin){
+        this.plugin = plugin;
     }
 
-    public Logger getLogger() {
-        return logger;
+    public JavaPlugin getJavaPlugin() {
+        return plugin;
     }
 }

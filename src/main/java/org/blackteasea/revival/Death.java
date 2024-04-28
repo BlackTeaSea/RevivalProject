@@ -10,6 +10,6 @@ import java.util.logging.Logger;
 public class Death implements Listener {
     @EventHandler
     public void uponDeath(PlayerDeathEvent event){
-        Data.getInstance().getLogger().info("I died!");
+        Data.getInstance().getJavaPlugin().getLogger().info("I died!");
     }
 }
