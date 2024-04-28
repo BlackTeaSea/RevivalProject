@@ -39,7 +39,7 @@ public class Resurrect implements Listener {
     public void initializeItems() {
         // Add the items to the inventory
         for (Player player : Data.getInstance().getPlayerList()) {
-            inv.addItem(createSkullItem(player,"Revive the player", player.getName()));
+            inv.addItem(createSkullItem(player, player.getName()));
         }
     }
 
@@ -49,7 +49,7 @@ public class Resurrect implements Listener {
 
     //Skullwork
 
-    public @NotNull ItemStack createSkullItem(Player player, final String name, final String... lore) {
+    public @NotNull ItemStack createSkullItem(Player player, final String... lore) {
         final ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1);
         final SkullMeta meta = (SkullMeta) skull.getItemMeta();
         meta.setOwningPlayer(player);

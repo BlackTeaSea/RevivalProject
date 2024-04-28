@@ -19,6 +19,7 @@ public class Death implements Listener {
         if (!data.getPlayerList().contains(player)) {
             data.addPlayer(player);
         }
+
     }
 
 
