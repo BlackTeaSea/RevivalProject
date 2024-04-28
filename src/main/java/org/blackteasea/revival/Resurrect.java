@@ -24,8 +24,11 @@ public class Resurrect implements Listener {
 
     private String resurrectee;
 
+    //Constructor
     public Resurrect() {
+        //data singleton
         data = Data.getInstance();
+        //GUI scheme
         inv = createInventory(null, 9, "Resurrect");
     }
 
@@ -33,6 +36,7 @@ public class Resurrect implements Listener {
     public void dropTotem(PlayerDropItemEvent event) {
         // If the item dropped is a Totem of Undying
         if (event.getItemDrop().getName().equals("Totem of Undying")) {
+
             openInventory(event.getPlayer());
             initializeItems();
         }
@@ -45,6 +49,12 @@ public class Resurrect implements Listener {
         }
     }
 
+    public void openInventory(final HumanEntity e) {
+        e.openInventory(inv);
+    }
+
+    //Skullwork
+
     public @NotNull ItemStack createSkullItem(Player player, final String name, final String... lore) {
         final ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1);
         final SkullMeta meta = (SkullMeta) skull.getItemMeta();
@@ -54,10 +64,7 @@ public class Resurrect implements Listener {
         return skull;
     }
 
-    public void openInventory(final HumanEntity e) {
-        e.openInventory(inv);
-    }
-
+    //GUI
     @EventHandler
     public void onInventoryClick(final InventoryClickEvent e) {
         if (!e.getInventory().equals(inv)) return;
@@ -70,14 +77,15 @@ public class Resurrect implements Listener {
 
         // Get the server console
         CommandSender server = Data.getInstance().getJavaPlugin().getServer().getConsoleSender();
-            resurrectee = clickedItem.getItemMeta().getLore().get(0);
-            data.getJavaPlugin().getServer().dispatchCommand(server, "gamemode survival " + resurrectee);
-            for (Player player : data.getPlayerList()) {
-                if (player.getName().equals(resurrectee)) {
-                    data.removePlayer(player);
-                    inv.remove(clickedItem);
-                }
+        resurrectee = clickedItem.getItemMeta().getLore().get(0);
+        data.getJavaPlugin().getServer().dispatchCommand(server, "gamemode survival " + resurrectee);
+        data.getJavaPlugin().getServer().dispatchCommand(server, "");
+        for (Player player : data.getPlayerList()) {
+            if (player.getName().equals(resurrectee)) {
+                data.removePlayer(player);
+                inv.remove(clickedItem);
             }
+        }
 
     }
 
