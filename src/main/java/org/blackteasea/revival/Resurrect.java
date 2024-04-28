@@ -41,9 +41,10 @@ public class Resurrect implements Listener {
         // If the item dropped is a Totem of Undying
         if (event.getItemDrop().getName().equals("Totem of Undying")) {
 
+            Data.getInstance().setDropEvent(event);
             openInventory(event.getPlayer());
             initializeItems();
-            event.getItemDrop().remove();
+
         }
 
     }
@@ -91,7 +92,7 @@ public class Resurrect implements Listener {
         if (clickedItem == null || clickedItem.getType().isAir()) return;
 
         // Get the server console
-        Server server = Data.getInstance().getInstance().getJavaPlugin().getServer();
+        Server server = Data.getInstance().getJavaPlugin().getServer();
         CommandSender serverSend = server.getConsoleSender();
 
         String resurrectee = clickedItem.getItemMeta().getLore().get(0);
@@ -108,6 +109,10 @@ public class Resurrect implements Listener {
                         .color(TextColor.color(0x5D3FD3))
                         .append(Component.text(" has undergone Revival!", TextColor.color(0xFFFFFF)));
                 server.broadcast(respawn);
+                if (Data.getInstance().getDropEvent() != null){
+                    Data.getInstance().getDropEvent().getItemDrop().remove();
+                }
+                Data.getInstance().setDropEvent(null);
 
             }
         }
