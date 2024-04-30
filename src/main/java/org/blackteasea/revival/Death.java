@@ -1,6 +1,5 @@
 package org.blackteasea.revival;
 
-import net.kyori.adventure.text.Component;
 import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -18,8 +17,6 @@ public class Death implements Listener {
         if (!data.getPlayerList().contains(player)) {
             data.addPlayer(player);
         }
-
-
     }
 
 

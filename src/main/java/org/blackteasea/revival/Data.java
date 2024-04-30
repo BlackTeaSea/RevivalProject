@@ -4,27 +4,24 @@ import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
-
 import java.beans.PropertyChangeSupport;
 import java.util.ArrayList;
 import java.util.List;
-
 import static org.bukkit.Bukkit.createInventory;
 
 public class Data extends PropertyChangeSupport {
     private static Data instance;
     private JavaPlugin plugin;
-
     private PlayerDropItemEvent dropEvent;
     private final List<Player> playerList;
-
     private Inventory inv;
+    private GUI gui;
 
     private Data() {
         super(new Object());
         playerList = new ArrayList<>();
         dropEvent = null;
-        inv = createInventory(null, 9, "Resurrect");
+        this.gui = null;
     }
 
     public static Data getInstance() {
@@ -62,19 +59,18 @@ public class Data extends PropertyChangeSupport {
         this.dropEvent = event;
     }
 
-    public void initializeItems(Inventory inv) {
-        // Add the items to the inventory
-        for (Player player : Data.getInstance().getPlayerList()) {
-            inv.addItem(Inv.createSkullItem(player, player.getName()));
-        }
-    }
-
     public Inventory getInventory() {
+        if (this.inv == null) {
+            this.inv = createInventory(null, 9, "Resurrect");
+        }
         return this.inv;
     }
 
-    public void setInventory(Inventory inv) {
-        this.inv = inv;
+    public GUI getGUI() {
+        if (this.gui == null) {
+            this.gui = new GUI();
+        }
+        return this.gui;
     }
 
 }

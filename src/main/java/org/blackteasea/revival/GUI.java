@@ -10,18 +10,27 @@ import org.jetbrains.annotations.NotNull;
 
 import java.util.Arrays;
 
-public class Inv {
-    public static void openInventory(final HumanEntity e) {
-        Inventory inv = Data.getInstance().getInventory();
-        e.openInventory(inv);
+public class GUI {
+    private final Inventory inv;
+
+    public GUI() {
+        this.inv = Data.getInstance().getInventory();
     }
-    public static void closeInventory(final HumanEntity e){
+    public void openInventory(final HumanEntity e) {
+        e.openInventory(this.inv);
+    }
+    public void closeInventory(final HumanEntity e){
         e.closeInventory();
     }
 
-    //Skullwork
+    public void initializeItems() {
+        // Add the items to the inventory
+        for (Player player : Data.getInstance().getPlayerList()) {
+            inv.addItem(createSkullItem(player, player.getName()));
+        }
+    }
 
-    public static @NotNull ItemStack createSkullItem(Player player, final String... lore) {
+    public @NotNull ItemStack createSkullItem(Player player, final String... lore) {
         final ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1);
         final SkullMeta meta = (SkullMeta) skull.getItemMeta();
         meta.setOwningPlayer(player);
