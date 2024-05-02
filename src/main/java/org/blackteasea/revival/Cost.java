@@ -2,6 +2,8 @@ package org.blackteasea.revival;
 
 //Calculates the price of revival based on that dead player's achievements
 
+import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Material;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
@@ -15,10 +17,21 @@ public class Cost {
 
 
     public static int getDeathTime(Player player){return player.getStatistic(Statistic.TIME_SINCE_DEATH)/20;}
-    public static String displayDeathTime(Player player){return "Last died " + getDeathTime(player) + " seconds ago";}
-
     public static int getDeathCount(Player player) {return player.getStatistic(Statistic.DEATHS);}
-    public static String displayDeathCount(Player player){return  getDeathCount(player) + " deaths";}
+
+    public static List<Component> StatComponent (Player player) {
+        ArrayList<Component> stats = new ArrayList<>();
+        stats.add(Component.text(getDeathCount(player)).color(TextColor.color(0xFFFFFF)));
+        stats.add(Component.text(getDeathTime(player)).color(TextColor.color(0xFFFFFF)));
+        return stats;
+    }
+
+    public static List<Component> CostComponent (Player player) {
+        ArrayList<Component> costs = new ArrayList<>();
+        return costs;
+    }
+
+
 
 
 
@@ -27,7 +40,7 @@ public class Cost {
 
 
     //TODO: Get item based on achievements
-    public List<ItemStack> deathCost (Player player) {
+    public static List<ItemStack> deathCost (Player player) {
 
         Material Cobblestone = Material.COBBLESTONE;
         Material Stone = Material.STONE;
