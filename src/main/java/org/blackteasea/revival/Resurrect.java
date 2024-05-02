@@ -44,7 +44,7 @@ public class Resurrect implements Listener {
         HumanEntity user = e.getWhoClicked();
         ForwardingAudience audience = Bukkit.getServer();
         Sound revive = Sound.sound(Key.key("block.end_portal.spawn"), Sound.Source.NEUTRAL, 1f, 1f);
-        Inventory inv = Data.getInstance().getInventory();
+        Inventory inv = Data.getInstance().getGUIInventory();
 
         if (!e.getInventory().equals(inv)) return;
 
@@ -80,6 +80,8 @@ public class Resurrect implements Listener {
                 Data.getInstance().setDropEvent(null);
             }
         }
+        //Remove the items
+
         //Close inventory for the person who clicked
         Data.getInstance().getGUI().closeInventory(e.getWhoClicked());
     }

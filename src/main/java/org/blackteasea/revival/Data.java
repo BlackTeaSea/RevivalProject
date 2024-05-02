@@ -59,12 +59,13 @@ public class Data extends PropertyChangeSupport {
         this.dropEvent = event;
     }
 
-    public Inventory getInventory() {
+    public Inventory getGUIInventory() {
         if (this.inv == null) {
             this.inv = createInventory(null, 9, "Resurrect");
         }
         return this.inv;
     }
+
 
     public GUI getGUI() {
         if (this.gui == null) {
