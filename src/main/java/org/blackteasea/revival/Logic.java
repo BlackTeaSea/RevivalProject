@@ -1,19 +1,41 @@
 package org.blackteasea.revival;
 
 import org.bukkit.Location;
+import org.bukkit.World;
+import org.bukkit.block.Block;
+
+import java.util.Random;
 
 public class Logic {
-    public static Location newSpawnLocation(Location location){
+    public static Location newSpawnLocation(Location location) {
+        World world = location.getWorld();
         Location newLocation = location.clone();
-        double scale = location.distanceSquared(new Location(location.getWorld(), 0, 0, 0));
-        newLocation = newLocation.multiply(scale/2);
-        newLocation.setY(location.getWorld().getSeaLevel());
+
+        // Set the Y-coordinate to the sea level
+        int seaLevel = world.getSeaLevel();
+        newLocation.setY(seaLevel);
+
+        // Adjust the Y-coordinate until a passable block is found
         while (!newLocation.getBlock().isPassable()) {
             newLocation.add(0, 1, 0);
         }
-        if (location.getWorld().isChunkLoaded(newLocation.getBlockX() >> 4, newLocation.getBlockZ() >> 4)) {
-            newLocation.add(1000, 0, 1000);
+        Block blockAtNewLocation = newLocation.getBlock();
+        while (!blockAtNewLocation.isPassable()) {
+            newLocation.add(0, 1, 0); // Move up if initial location is within a block
         }
+
+        // Create a Random object
+        Random random = new Random();
+
+        // Randomly choose whether to add or subtract for X and Z coordinates
+        int randomXDirection = random.nextBoolean() ? 1 : -1; // Randomly choose between 1 and -1 for X direction
+        int randomZDirection = random.nextBoolean() ? 1 : -1; // Randomly choose between 1 and -1 for Z direction
+
+        // Keep adding and subtracting until unloaded chunk
+        while (world.isChunkLoaded(newLocation.getBlockX() >> 4, newLocation.getBlockZ() >> 4)) {
+            newLocation.add(randomXDirection * 1000, 0, randomZDirection * 1000);
+        }
+
         return newLocation;
     }
 }
