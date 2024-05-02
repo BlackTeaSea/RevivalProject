@@ -6,6 +6,7 @@ import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.bukkit.Bukkit;
+import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
 import org.bukkit.entity.HumanEntity;
@@ -18,6 +19,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import java.util.ArrayList;
 import java.util.List;
+
+import static org.blackteasea.revival.Logic.newSpawnLocation;
 
 public class Resurrect implements Listener {
 
@@ -55,6 +58,11 @@ public class Resurrect implements Listener {
         List<Player> playerListCopy = new ArrayList<>(Data.getInstance().getPlayerList());
         for (Player player : playerListCopy) {
             if (player.getName().equals(resurrected)) {
+                Location location = player.getLastDeathLocation();
+                assert location != null;
+                Location newLoc = newSpawnLocation(location);
+                Data.getInstance().getJavaPlugin().getLogger().info("New location: " + newLoc);
+                player.teleport(newLoc);
                 player.setGameMode(org.bukkit.GameMode.SURVIVAL);
                 Data.getInstance().removePlayer(player);
                 inv.remove(clickedItem);
