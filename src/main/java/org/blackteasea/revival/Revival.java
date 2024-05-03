@@ -16,6 +16,7 @@ public final class Revival extends JavaPlugin {
         getServer().getWorlds().forEach(world -> world.setGameRule(SEND_COMMAND_FEEDBACK, false));
         getServer().getWorlds().forEach(world -> world.setGameRule(DO_IMMEDIATE_RESPAWN, true));
         getLogger().info("Command feedback is now off");
+        getServer().addRecipe(Recipe.totemRecipe());
 
     }
 
