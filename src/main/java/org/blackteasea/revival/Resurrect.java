@@ -5,10 +5,12 @@ import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
+import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
+import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
@@ -17,6 +19,8 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.ItemMeta;
+
 import java.util.ArrayList;
 import java.util.List;
 
@@ -26,7 +30,7 @@ public class Resurrect implements Listener {
     @EventHandler
     public void dropTotem(PlayerDropItemEvent event) {
         // If the item dropped is a Totem of Undying
-        if (event.getItemDrop().getName().equals("Totem of Revival")) {
+        if (event.getItemDrop().getName().equals("Nether Star")) {
             Data.getInstance().getJavaPlugin().getServer().getScheduler().runTaskLater(Data.getInstance().getJavaPlugin(), () -> {
                 if (event.getItemDrop().getLocation().getBlock().getType() == Material.WATER){
                     Data.getInstance().setDropEvent(event);
@@ -53,7 +57,17 @@ public class Resurrect implements Listener {
 
         if (clickedItem == null || clickedItem.getType().isAir()) return;
 
-        String resurrected = clickedItem.getItemMeta().getLore().get(0);
+        // Checks if they got the stuff
+        for (ItemStack itemStack : Cost.deathCost(Data.getInstance().getDropEvent().getPlayer())) {
+            if (!user.getInventory().containsAtLeast(itemStack, 1)){
+                Data.getInstance().getGUI().closeInventory(e.getWhoClicked());
+                final Component insufficientMaterial = Component.text("You do not have enough materials, " + user.getName());
+                Data.getInstance().getJavaPlugin().getServer().broadcast(insufficientMaterial);
+                return;
+            }
+        }
+
+        String resurrected = PlainTextComponentSerializer.plainText().serialize(clickedItem.getItemMeta().lore().get(0));
         List<Player> playerListCopy = new ArrayList<>(Data.getInstance().getPlayerList());
         for (Player player : playerListCopy) {
             if (player.getName().equals(resurrected)) {
@@ -66,10 +80,14 @@ public class Resurrect implements Listener {
                 //Plays a sound and sends a message
                 audience.playSound(revive);
                 Server server = Data.getInstance().getJavaPlugin().getServer();
+
+                //Component
                 final Component respawn = Component.text(player.getName())
                         .color(TextColor.color(0x5D3FD3))
                         .append(Component.text(" has undergone Revival!", TextColor.color(0xFFFFFF)));
                 server.broadcast(respawn);
+
+
                 if (Data.getInstance().getDropEvent() != null){
                     Data.getInstance().getDropEvent().getItemDrop().remove();
                 }
