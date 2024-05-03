@@ -23,5 +23,6 @@ public final class Revival extends JavaPlugin {
     @Override
     public void onDisable() {
         // Plugin shutdown logic
+        getServer().getWorlds().forEach(world -> world.setGameRule(SEND_COMMAND_FEEDBACK, true));
     }
 }
