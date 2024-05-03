@@ -30,10 +30,13 @@ public class Resurrect implements Listener {
     @EventHandler
     public void dropTotem(PlayerDropItemEvent event) {
         // If the item dropped is a Totem of Undying
-        if (event.getItemDrop().getName().equals("Nether Star")) {
+        Component Name = event.getItemDrop().getItemStack().displayName();
+        String name = PlainTextComponentSerializer.plainText().serialize(Name);
+        System.out.println(name);
+        if (name .equals("[Totem of Revival]")) {
             Data.getInstance().getJavaPlugin().getServer().getScheduler().runTaskLater(Data.getInstance().getJavaPlugin(), () -> {
                 if (event.getItemDrop().getLocation().getBlock().getType() == Material.WATER){
-                    Data.getInstance().setDropEvent(event);
+
                     Data.getInstance().getGUI().openInventory(event.getPlayer());
                     Data.getInstance().getGUI().initializeItems();
                 }
@@ -58,21 +61,13 @@ public class Resurrect implements Listener {
         if (clickedItem == null || clickedItem.getType().isAir()) return;
 
         // Checks if they got the stuff
-        for (ItemStack itemStack : Cost.deathCost(Data.getInstance().getDropEvent().getPlayer())) {
-            if (!user.getInventory().containsAtLeast(itemStack, 1)){
-                Data.getInstance().getGUI().closeInventory(e.getWhoClicked());
-                final Component insufficientMaterial = Component.text("You do not have enough materials, " + user.getName());
-                Data.getInstance().getJavaPlugin().getServer().broadcast(insufficientMaterial);
-                return;
-            }
-        }
 
         String resurrected = PlainTextComponentSerializer.plainText().serialize(clickedItem.getItemMeta().lore().get(0));
         List<Player> playerListCopy = new ArrayList<>(Data.getInstance().getPlayerList());
         for (Player player : playerListCopy) {
             if (player.getName().equals(resurrected)) {
                 PlayerDropItemEvent event = Data.getInstance().getDropEvent();
-                player.teleport(event.getItemDrop().getLocation());
+                player.teleport(user.getLocation());
                 player.setGameMode(org.bukkit.GameMode.SURVIVAL);
                 Data.getInstance().removePlayer(player);
                 inv.remove(clickedItem);
