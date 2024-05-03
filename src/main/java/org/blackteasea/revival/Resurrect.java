@@ -27,7 +27,7 @@ public class Resurrect implements Listener {
     @EventHandler
     public void dropTotem(PlayerDropItemEvent event) {
         // If the item dropped is a Totem of Undying
-        if (event.getItemDrop().getName().equals("Totem of Undying")) {
+        if (event.getItemDrop().getName().equals("Totem of Revival")) {
             Data.getInstance().getJavaPlugin().getServer().getScheduler().runTaskLater(Data.getInstance().getJavaPlugin(), () -> {
                 if (event.getItemDrop().getLocation().getBlock().getType() == Material.WATER){
                     Data.getInstance().setDropEvent(event);
