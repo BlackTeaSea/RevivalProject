@@ -90,9 +90,6 @@ public class Cost {
         }
         List<ItemStack> cost = new ArrayList<ItemStack>();
 
-        cost.add(new ItemStack(Cobblestone, getDeathTime(player)));
-        cost.add(new ItemStack(Stone, getDeathCount(player)));
-
 
         return cost;
     }
