@@ -10,8 +10,8 @@ import org.bukkit.Bukkit;
 import org.bukkit.Location;
 import org.bukkit.Material;
 import org.bukkit.Server;
-import org.bukkit.attribute.Attribute;
 import org.bukkit.entity.HumanEntity;
+import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -19,28 +19,45 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
-import org.bukkit.inventory.meta.ItemMeta;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.ArrayList;
 import java.util.List;
+import java.util.HashMap;
+import java.util.Map;
 
 
 public class Resurrect implements Listener {
+
+    private Map<Item, BukkitRunnable> itemTasks = new HashMap<>();
 
     @EventHandler
     public void dropTotem(PlayerDropItemEvent event) {
         // If the item dropped is a Totem of Undying
         Component Name = event.getItemDrop().getItemStack().displayName();
         String name = PlainTextComponentSerializer.plainText().serialize(Name);
-        System.out.println(name);
         if (name .equals("[Totem of Revival]")) {
-            Data.getInstance().getJavaPlugin().getServer().getScheduler().runTaskLater(Data.getInstance().getJavaPlugin(), () -> {
-                if (event.getItemDrop().getLocation().getBlock().getType() == Material.WATER){
-
-                    Data.getInstance().getGUI().openInventory(event.getPlayer());
-                    Data.getInstance().getGUI().initializeItems();
+            BukkitRunnable task = new BukkitRunnable() {
+                @Override
+                public void run() {
+                    if (event.getItemDrop().getLocation().getBlock().isLiquid()){
+                        cancel();
+                        Data.getInstance().getJavaPlugin().getServer()
+                                .getPluginManager().callEvent(new ItemEntersWaterEvent(event.getItemDrop(), event.getPlayer()));
+                    }
                 }
-            }, 20L);
+            };
+            task.runTaskTimer(Data.getInstance().getJavaPlugin(), 0, 1);
+            itemTasks.put(event.getItemDrop(), task);
+        }
+    }
+
+    @EventHandler
+    public void onItemEntersWater(ItemEntersWaterEvent event) {
+        if (event.getLocation().getBlock().getType() == Material.WATER){
+            Data.getInstance().setDropLocation(event.getLocation());
+            Data.getInstance().getGUI().openInventory(event.getPlayer());
+            Data.getInstance().getGUI().initializeItems();
         }
     }
 
@@ -67,11 +84,13 @@ public class Resurrect implements Listener {
         List<Player> playerListCopy = new ArrayList<>(Data.getInstance().getPlayerList());
         for (Player player : playerListCopy) {
             if (player.getName().equals(resurrected)) {
-                PlayerDropItemEvent event = Data.getInstance().getDropEvent();
-                player.teleport(user.getLocation());
+                Location loc = Data.getInstance().getDropLocation();
+                if (loc == null) return;
+                player.teleport(loc);
                 player.setGameMode(org.bukkit.GameMode.SURVIVAL);
                 Data.getInstance().removePlayer(player);
                 inv.remove(clickedItem);
+                Data.getInstance().setDropLocation(null);
 
                 //Plays a sound and sends a message
                 audience.playSound(revive);

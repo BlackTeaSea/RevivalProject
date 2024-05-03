@@ -1,5 +1,6 @@
 package org.blackteasea.revival;
 
+import org.bukkit.Location;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.Inventory;
@@ -17,11 +18,13 @@ public class Data extends PropertyChangeSupport {
     private Inventory inv;
     private GUI gui;
 
+    private Location dropLocation;
     private Data() {
         super(new Object());
         playerList = new ArrayList<>();
         dropEvent = null;
         this.gui = null;
+        dropLocation = null;
     }
 
     public static Data getInstance() {
@@ -72,6 +75,14 @@ public class Data extends PropertyChangeSupport {
             this.gui = new GUI();
         }
         return this.gui;
+    }
+
+    public void setDropLocation(Location location) {
+        this.dropLocation = location;
+    }
+
+    public Location getDropLocation() {
+        return this.dropLocation;
     }
 
 }
