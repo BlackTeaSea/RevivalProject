@@ -57,22 +57,14 @@ public class Resurrect implements Listener {
 
         if (clickedItem == null || clickedItem.getType().isAir()) return;
 
-        // Checks if they got the stuff
-        for (ItemStack itemStack : Cost.deathCost(Data.getInstance().getDropEvent().getPlayer())) {
-            if (!user.getInventory().containsAtLeast(itemStack, 1)){
-                Data.getInstance().getGUI().closeInventory(e.getWhoClicked());
-                final Component insufficientMaterial = Component.text("You do not have enough materials, " + user.getName());
-                Data.getInstance().getJavaPlugin().getServer().broadcast(insufficientMaterial);
-                return;
-            }
-        }
+
 
         String resurrected = PlainTextComponentSerializer.plainText().serialize(clickedItem.getItemMeta().lore().get(0));
         List<Player> playerListCopy = new ArrayList<>(Data.getInstance().getPlayerList());
         for (Player player : playerListCopy) {
             if (player.getName().equals(resurrected)) {
                 PlayerDropItemEvent event = Data.getInstance().getDropEvent();
-                player.teleport(event.getItemDrop().getLocation());
+                player.teleport(user.getLocation());
                 player.setGameMode(org.bukkit.GameMode.SURVIVAL);
                 Data.getInstance().removePlayer(player);
                 inv.remove(clickedItem);
