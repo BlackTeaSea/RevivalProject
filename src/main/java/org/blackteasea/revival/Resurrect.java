@@ -6,10 +6,7 @@ import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
-import org.bukkit.Bukkit;
-import org.bukkit.Location;
-import org.bukkit.Material;
-import org.bukkit.Server;
+import org.bukkit.*;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
@@ -87,6 +84,10 @@ public class Resurrect implements Listener {
                 Location loc = Data.getInstance().getDropLocation();
                 if (loc == null) return;
                 player.teleport(loc);
+                int newplaytime = Cost.getPlayTime(player) - Cost.getDeathTime(player);
+
+                player.setStatistic(Statistic.PLAY_ONE_MINUTE, newplaytime);
+                player.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
                 player.setGameMode(org.bukkit.GameMode.SURVIVAL);
                 Data.getInstance().removePlayer(player);
                 inv.remove(clickedItem);
