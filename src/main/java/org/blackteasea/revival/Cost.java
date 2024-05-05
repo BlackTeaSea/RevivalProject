@@ -32,7 +32,7 @@ public class Cost {
 
     public static int getDeathTime(Player player){return player.getStatistic(Statistic.TIME_SINCE_DEATH)/20;}
     public static int getDeathCount(Player player) {return player.getStatistic(Statistic.DEATHS);}
-    public static int getPlayTime(Player player) {return player.getStatistic(Statistic.TIME_SINCE_DEATH)/20;};
+    public static int getPlayTime(Player player) {return player.getStatistic(Statistic.PLAY_ONE_MINUTE)/20;};
 
     public static int getPower(Player player){
         int timeAlive = (getPlayTime(player) - getDeathTime(player))/(60);
