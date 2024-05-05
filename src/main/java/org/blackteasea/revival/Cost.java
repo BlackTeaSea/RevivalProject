@@ -32,7 +32,18 @@ public class Cost {
 
     public static int getDeathTime(Player player){return player.getStatistic(Statistic.TIME_SINCE_DEATH)/20;}
     public static int getDeathCount(Player player) {return player.getStatistic(Statistic.DEATHS);}
-    public static int getPlayTime(Player player) {return player.getStatistic(Statistic.TIME_SINCE_DEATH);};
+    public static int getPlayTime(Player player) {return player.getStatistic(Statistic.TIME_SINCE_DEATH)/20;};
+
+    public static int getPower(Player player){
+        int timeAlive = (getPlayTime(player) - getDeathTime(player))/(60);
+        int score = player.getTotalExperience();
+
+        return score + timeAlive;
+    }
+
+    public static Component displayPower(Player player){
+        return Component.text(getPower(player) + " power").color(TextColor.color(0x7FFFD4));
+    }
 
     public static Component cleanDeathTime(int seconds) {
         Component response = Component.text("Died ").color(TextColor.color(0xFFFFFF));
@@ -54,16 +65,8 @@ public class Cost {
         return response.append(Component.text(options[5]));
     }
 
-    public static int getPower(Player player){
-        int livingtime = (getPlayTime(player) - getDeathTime(player))/(20 * 60);
-        int score = player.getTotalExperience();
 
-        return score + livingtime;
-    }
 
-    public static Component displayPower(Player player){
-        return Component.text(getPower(player) + " power").color(TextColor.color(0x7FFFD4));
-    }
 
     public static List<Component> StatComponent (Player player) {
         ArrayList<Component> stats = new ArrayList<>();
@@ -71,7 +74,6 @@ public class Cost {
         stats.add(Component.text(getDeathCount(player) + " Deaths").color(TextColor.color(0xFFFFFF)));
         stats.add(cleanDeathTime(getDeathTime(player)));
         stats.add(displayPower(player));
-
 
         return stats;
     }
