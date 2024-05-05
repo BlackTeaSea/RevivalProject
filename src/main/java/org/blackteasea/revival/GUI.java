@@ -16,8 +16,9 @@ import java.util.Arrays;
 import java.util.List;
 
 public class GUI {
-    private final Inventory inv;
 
+    //Basic GUI Things
+    private final Inventory inv;
     public GUI() {
         this.inv = Data.getInstance().getGUIInventory();
     }
@@ -27,6 +28,8 @@ public class GUI {
     public void closeInventory(final HumanEntity e){
         e.closeInventory();
     }
+
+
 
     public void initializeItems() {
         // Add the items to the inventory

@@ -16,7 +16,9 @@ public class Data extends PropertyChangeSupport {
     private PlayerDropItemEvent dropEvent;
     private final List<Player> playerList;
     private Inventory inv;
+    private Inventory costinv;
     private GUI gui;
+    private CostGUI costgui;
 
     private Location dropLocation;
     private Data() {
@@ -68,6 +70,12 @@ public class Data extends PropertyChangeSupport {
         }
         return this.inv;
     }
+    public Inventory getLargeGUIInventory() {
+        if (this.costinv == null) {
+            this.costinv = createInventory(null, 54, "Cost");
+        }
+        return this.costinv;
+    }
 
 
     public GUI getGUI() {
@@ -75,6 +83,13 @@ public class Data extends PropertyChangeSupport {
             this.gui = new GUI();
         }
         return this.gui;
+    }
+
+    public CostGUI getCostGUI() {
+        if (this.costgui == null) {
+            this.costgui = new CostGUI();
+        }
+        return this.costgui;
     }
 
     public void setDropLocation(Location location) {
