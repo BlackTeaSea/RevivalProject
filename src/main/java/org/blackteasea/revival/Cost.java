@@ -10,10 +10,10 @@ import org.bukkit.NamespacedKey;
 import org.bukkit.Statistic;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.advancement.AdvancementProgress;
-import org.bukkit.entity.Item;
-import org.bukkit.entity.Player;
+import org.bukkit.entity.*;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.w3c.dom.Text;
 
 import javax.naming.Name;
 import javax.xml.stream.events.Namespace;
@@ -21,50 +21,57 @@ import java.util.ArrayList;
 import java.util.List;
 
 public class Cost {
-    public static String[][] advancementChecks = {
-            {"story/mine_stone", "Stone Breaker"},
-            {"story/smelt_iron", "Iron Smelter"},
-            {"story/mine_diamond", "Gem Hoarder"},
-            {"story/enter_the_nether", "Hell Diver"},
-            {"story/enter_the_end", "Witness to the End"},
-            {"end/kill_dragon", "Dragonslayer"},
-            {"adventure/kill_a_mob", "Hunter"},
-            {"adventure/trade", "Capitalist"},
-            {"adventure/totem_of_undying", "Reincarnated"},
-
+    public static String[]advancementChecks = {
+            "end/kill_dragon",
+            "nether/netherite_armor",
+            "adventure/kill_all_mobs",
+            "adventure/adventuring_time",
+            "adventure/sniper_duel"
             };
 
 
     public static int getDeathTime(Player player){return player.getStatistic(Statistic.TIME_SINCE_DEATH)/20;}
     public static int getDeathCount(Player player) {return player.getStatistic(Statistic.DEATHS);}
+    public static int getPlayTime(Player player) {return player.getStatistic(Statistic.TIME_SINCE_DEATH);};
 
-    public static AdvancementProgress getAdvancementProgress(Player player, String plugin, String advancementName){
-        NamespacedKey namespace = new NamespacedKey(plugin, advancementName);
-        Advancement advancement = Data.getInstance().getJavaPlugin().getServer().getAdvancement(namespace);
-        return player.getAdvancementProgress(advancement);
+    public static Component cleanDeathTime(int seconds) {
+        Component response = Component.text("Died ").color(TextColor.color(0xFFFFFF));
+        String[] options = {
+                "just now",
+                "a few minutes ago",
+                "a few hours ago",
+                "a few days ago",
+                "a few weeks ago",
+                "a long time ago..."
+        };
+        int[] timestamps = {60, 3600, 86400, 604800, 18144000};
+
+        for(int i = 0;i < 4; i++ ){
+            if(seconds < timestamps[i]){
+                return response.append(Component.text(options[i]));
+            }
+        }
+        return response.append(Component.text(options[5]));
     }
 
-    public static boolean hasCompleted(Player player, String advancementName){
-        AdvancementProgress toCheck = getAdvancementProgress(player, "minecraft", advancementName);
-        if (toCheck.isDone()){
-            return true;
-        }
+    public static int getPower(Player player){
+        int livingtime = (getPlayTime(player) - getDeathTime(player))/(20 * 60);
+        int score = player.getTotalExperience();
 
-        return false;
+        return score + livingtime;
+    }
+
+    public static Component displayPower(Player player){
+        return Component.text(getPower(player) + " power").color(TextColor.color(0x7FFFD4));
     }
 
     public static List<Component> StatComponent (Player player) {
         ArrayList<Component> stats = new ArrayList<>();
         //Statistics
         stats.add(Component.text(getDeathCount(player) + " Deaths").color(TextColor.color(0xFFFFFF)));
-        stats.add(Component.text("Died " + getDeathTime(player) + " seconds ago").color(TextColor.color(0xFFFFFF)));
+        stats.add(cleanDeathTime(getDeathTime(player)));
+        stats.add(displayPower(player));
 
-        //Advancements
-        for(String[] titles : advancementChecks){
-            if(hasCompleted(player, titles[0])){
-                stats.add(Component.text(titles[1]).color(TextColor.color(0xFFFDD0)));
-            }
-        }
 
         return stats;
     }
