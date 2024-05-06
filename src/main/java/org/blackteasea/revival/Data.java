@@ -22,14 +22,14 @@ public class Data extends PropertyChangeSupport {
 
     private Location dropLocation;
 
-    private Load loader;
+    private Save loader;
     private Data() {
         super(new Object());
         playerList = new ArrayList<>();
         dropEvent = null;
         this.gui = null;
         dropLocation = null;
-        loader = new Load();
+        loader = null;
     }
 
     public static Data getInstance() {
@@ -84,6 +84,10 @@ public class Data extends PropertyChangeSupport {
         return this.costinv;
     }
 
+    public void setLargeGUIInventory(Inventory inv) {
+        this.costinv = inv;
+    }
+
 
     public GUI getGUI() {
         if (this.gui == null) {
@@ -107,12 +111,14 @@ public class Data extends PropertyChangeSupport {
         return this.dropLocation;
     }
 
-    public Load getLoader() {
+    public Save getLoader() {
+        if (this.loader == null) {
+            this.loader = Save.loadData("./Revival.dat");
+        }
         return this.loader;
     }
 
-    public void setLoader(Load loader) {
+    public void setLoader(Save loader) {
         this.loader = loader;
     }
-
 }

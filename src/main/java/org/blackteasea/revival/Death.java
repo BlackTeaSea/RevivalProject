@@ -1,6 +1,5 @@
 package org.blackteasea.revival;
 
-import org.bukkit.GameMode;
 import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
@@ -16,8 +15,7 @@ public class Death implements Listener {
         data.getJavaPlugin().getLogger().info(player.getName() + " has died and will come back!");
         if (!data.getPlayerList().contains(player)) {
             data.addPlayer(player);
-            Load loader = data.getLoader();
-            loader.savePlayerData(data.getPlayerList());
+            Save loader = data.getLoader();
         }
     }
 

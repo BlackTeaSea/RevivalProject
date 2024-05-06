@@ -1,0 +1,78 @@
+package org.blackteasea.revival;
+
+import org.bukkit.Location;
+import org.bukkit.entity.Player;
+import org.bukkit.inventory.Inventory;
+import org.bukkit.util.io.BukkitObjectInputStream;
+import org.bukkit.util.io.BukkitObjectOutputStream;
+
+import java.io.FileInputStream;
+import java.io.FileOutputStream;
+import java.io.IOException;
+import java.io.Serializable;
+import java.util.List;
+import java.util.Objects;
+import java.util.zip.GZIPInputStream;
+import java.util.zip.GZIPOutputStream;
+
+public class Save implements Serializable {
+
+    private static transient final long serialVersionUID = -1681012206529286330L;
+
+    public final List<Player> playerList;
+    public final Inventory inv;
+    public final Location dropLocation;
+    public Save(List<Player> playerList, Inventory inv, Location dropLocation){
+        this.inv = inv;
+        this.dropLocation = dropLocation;
+        this.playerList = playerList;
+    }
+
+    public Save(Save save) {
+        this.inv = save.inv;
+        this.dropLocation = save.dropLocation;
+        this.playerList = save.playerList;
+    }
+
+    public boolean saveData(String filePath) {
+        try {
+            BukkitObjectOutputStream out = new BukkitObjectOutputStream(new GZIPOutputStream(new FileOutputStream(filePath)));
+            out.writeObject(this);
+            out.close();
+            return true;
+        } catch (IOException e) {
+            e.printStackTrace();
+            return false;
+        }
+    }
+
+    public static Save loadData(String filePath) {
+        try {
+            BukkitObjectInputStream in = new BukkitObjectInputStream(new GZIPInputStream(new FileInputStream(filePath)));
+            Save save = (Save) in.readObject();
+            in.close();
+            return save;
+        } catch (ClassNotFoundException | IOException e) {
+            e.printStackTrace();
+        };
+        return null;
+    }
+
+    public void setSave(){
+        List<Player> playerList = Data.getInstance().getPlayerList();
+        Inventory inv = Data.getInstance().getLargeGUIInventory();
+        Location dropLocation = Data.getInstance().getDropLocation();
+        new Save(playerList, inv, dropLocation).saveData("./Revival.dat");
+        Data.getInstance().getJavaPlugin().getLogger().info("Data saved");
+    }
+
+    public void getSave(){
+        Save data = new Save(Objects.requireNonNull(Save.loadData("./Revival.dat")));
+        Data.getInstance().setPlayerList(playerList);
+        Data.getInstance().setLargeGUIInventory(data.inv);
+        Data.getInstance().setDropLocation(data.dropLocation);
+        Data.getInstance().getJavaPlugin().getLogger().info("Data loaded");
+    }
+
+
+}

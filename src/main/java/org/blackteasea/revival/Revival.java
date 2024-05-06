@@ -1,9 +1,6 @@
 package org.blackteasea.revival;
 
-import org.bukkit.entity.Player;
 import org.bukkit.plugin.java.JavaPlugin;
-
-import java.util.List;
 
 import static org.bukkit.GameRule.DO_IMMEDIATE_RESPAWN;
 import static org.bukkit.GameRule.SEND_COMMAND_FEEDBACK;
@@ -15,9 +12,8 @@ public final class Revival extends JavaPlugin {
         // Plugin startup logic
         Data.getInstance().setJavaPlugin(this);
         getLogger().info("Starting The Revival Project");
-        Load loader = Data.getInstance().getLoader();
-        List<Player> players = loader.loadPlayerData();
-        Data.getInstance().setPlayerList(players);
+        Save loader = Data.getInstance().getLoader();
+        loader.getSave();
 
         getServer().getPluginManager().registerEvents(new Death(), this);
         getServer().getPluginManager().registerEvents(new Resurrect(), this);
@@ -25,12 +21,13 @@ public final class Revival extends JavaPlugin {
         getServer().getWorlds().forEach(world -> world.setGameRule(DO_IMMEDIATE_RESPAWN, true));
         getLogger().info("Command feedback is now off");
         getServer().addRecipe(Recipe.totemRecipe());
-
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
         getServer().getWorlds().forEach(world -> world.setGameRule(SEND_COMMAND_FEEDBACK, true));
+        Save loader = Data.getInstance().getLoader();
+        loader.saveData("./Revival.dat");
     }
 }
