@@ -49,7 +49,7 @@ public class Cost {
         Component response = Component.text("Died ").color(TextColor.color(0xFFFFFF));
         String[] options = {
                 "just now",
-                "a few minutes ago",
+                "a few minutes ago ",
                 "a few hours ago",
                 "a few days ago",
                 "a few weeks ago",
