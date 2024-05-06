@@ -18,7 +18,6 @@ public final class Revival extends JavaPlugin {
         if (loader != null){
             System.out.println(loader.playerList.toString());
         }
-
         getServer().getPluginManager().registerEvents(new Death(), this);
         getServer().getPluginManager().registerEvents(new Resurrect(), this);
         getServer().getWorlds().forEach(world -> world.setGameRule(SEND_COMMAND_FEEDBACK, false));
