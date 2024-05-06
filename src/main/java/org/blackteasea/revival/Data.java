@@ -1,6 +1,8 @@
 package org.blackteasea.revival;
 
+import org.bukkit.Bukkit;
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.Inventory;
@@ -14,7 +16,7 @@ public class Data extends PropertyChangeSupport {
     private static Data instance;
     private JavaPlugin plugin;
     private PlayerDropItemEvent dropEvent;
-    private final List<Player> playerList;
+    private List<OfflinePlayer> playerList;
     private Inventory inv;
     private Inventory costinv;
     private GUI gui;
@@ -47,7 +49,7 @@ public class Data extends PropertyChangeSupport {
         this.plugin = plugin;
     }
 
-    public void addPlayer(Player player) {
+    public void addPlayer(OfflinePlayer player) {
         this.playerList.add(player);
     }
 
@@ -55,13 +57,19 @@ public class Data extends PropertyChangeSupport {
         this.playerList.remove(player);
     }
 
-    public List<Player> getPlayerList() {
+    public List<OfflinePlayer> getPlayerList() {
         return this.playerList;
     }
 
-    public void setPlayerList(List<Player> players) {
-        this.playerList.addAll(players);
+    public void setPlayerList(List<OfflinePlayer> players) {
+        this.playerList = players;
     }
+
+//    public void setPlayerListOff(List<OfflinePlayer> players){
+//        for (OfflinePlayer player : players){
+//            this.playerList.add(player.getPlayer());
+//        }
+//    }
 
     public PlayerDropItemEvent getDropEvent() {
         return this.dropEvent;
@@ -111,14 +119,20 @@ public class Data extends PropertyChangeSupport {
         return this.dropLocation;
     }
 
-    public Save getLoader() {
-        if (this.loader == null) {
-            this.loader = Save.loadData("./Revival.dat");
-        }
+    public Save getLoader(){
         return this.loader;
     }
 
     public void setLoader(Save loader) {
         this.loader = loader;
     }
+
+//    public List<OfflinePlayer> getOfflinePlayerList() {
+//        List<OfflinePlayer> offlinePlayers = new ArrayList<>();
+//        for (Player player : this.playerList) {
+//            offlinePlayers.add(Bukkit.getOfflinePlayer(player.getUniqueId()));
+//            System.out.println(player.getUniqueId());
+//        }
+//        return offlinePlayers;
+//    }
 }

@@ -1,0 +1,13 @@
+org\blackteasea\revival\Save.class
+org\blackteasea\revival\Recipe.class
+org\blackteasea\revival\GUI.class
+org\blackteasea\revival\Cost.class
+org\blackteasea\revival\Death.class
+org\blackteasea\revival\Logic.class
+org\blackteasea\revival\ItemEntersWaterEvent.class
+org\blackteasea\revival\Advancements.class
+org\blackteasea\revival\Revival.class
+org\blackteasea\revival\Resurrect.class
+org\blackteasea\revival\Data.class
+org\blackteasea\revival\CostGUI.class
+org\blackteasea\revival\Resurrect$1.class

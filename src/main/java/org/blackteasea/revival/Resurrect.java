@@ -78,18 +78,23 @@ public class Resurrect implements Listener {
 
 
         String resurrected = PlainTextComponentSerializer.plainText().serialize(clickedItem.getItemMeta().lore().get(0));
-        List<Player> playerListCopy = new ArrayList<>(Data.getInstance().getPlayerList());
-        for (Player player : playerListCopy) {
-            if (player.getName().equals(resurrected)) {
+        OfflinePlayer rezzed = Bukkit.getOfflinePlayer(resurrected);
+        List<OfflinePlayer> playerListCopy = new ArrayList<>(Data.getInstance().getPlayerList());
+        for (OfflinePlayer player : playerListCopy) {
+            if (player.getUniqueId().equals(resurrected)) {
                 Location loc = Data.getInstance().getDropLocation();
                 if (loc == null) return;
-                player.teleport(loc);
-                int newplaytime = Cost.getPlayTime(player) - Cost.getDeathTime(player);
+                if (!player.isOnline()){
+                    return;
+                }
+                Player playor = (Player) player;
+                playor.teleport(loc);
+                int newplaytime = Cost.getPlayTime(playor) - Cost.getDeathTime(playor);
 
-                player.setStatistic(Statistic.PLAY_ONE_MINUTE, newplaytime);
-                player.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
-                player.setGameMode(org.bukkit.GameMode.SURVIVAL);
-                Data.getInstance().removePlayer(player);
+                playor.setStatistic(Statistic.PLAY_ONE_MINUTE, newplaytime);
+                playor.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
+                playor.setGameMode(org.bukkit.GameMode.SURVIVAL);
+                Data.getInstance().removePlayer(playor);
                 inv.remove(clickedItem);
                 Data.getInstance().setDropLocation(null);
 

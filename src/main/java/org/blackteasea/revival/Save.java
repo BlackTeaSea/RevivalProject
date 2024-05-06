@@ -1,12 +1,15 @@
 package org.blackteasea.revival;
 
 import org.bukkit.Location;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
@@ -17,18 +20,18 @@ public class Save implements Serializable {
 
     private static transient final long serialVersionUID = -1681012206529286330L;
 
-    public final List<Player> playerList;
-    public final Inventory inv;
-    public final Location dropLocation;
-    public Save(List<Player> playerList, Inventory inv, Location dropLocation){
-        this.inv = inv;
-        this.dropLocation = dropLocation;
+    public final List<OfflinePlayer> playerList;
+//    public final Inventory inv;
+//    public final Location dropLocation;
+    public Save(List<OfflinePlayer> playerList){
+//        this.inv = inv;
+//        this.dropLocation = dropLocation;
         this.playerList = playerList;
     }
 
     public Save(Save save) {
-        this.inv = save.inv;
-        this.dropLocation = save.dropLocation;
+//        this.inv = save.inv;
+//        this.dropLocation = save.dropLocation;
         this.playerList = save.playerList;
     }
 
@@ -39,8 +42,9 @@ public class Save implements Serializable {
             if (!folder.exists()) {
                 folder.mkdirs();
             }
+            System.out.println(playerList.toString());
 
-            BukkitObjectOutputStream out = new BukkitObjectOutputStream(new GZIPOutputStream(new FileOutputStream(filePath)));
+            BukkitObjectOutputStream out = new BukkitObjectOutputStream(new GZIPOutputStream(Files.newOutputStream(Paths.get(filePath))));
             out.writeObject(this);
             out.close();
             return true;
@@ -55,7 +59,7 @@ public class Save implements Serializable {
             File file = new File(filePath);
             if (!file.exists()) {
                 // If the file doesn't exist, create a new Save object with default values
-                Save defaultSave = new Save(new ArrayList<>(), null, null);
+                Save defaultSave = new Save(Data.getInstance().getPlayerList());
                 defaultSave.saveData(filePath); // Save the default data to the file
                 return defaultSave;
             } else {
@@ -72,19 +76,23 @@ public class Save implements Serializable {
     }
 
     public void setSave(){
-        List<Player> playerList = Data.getInstance().getPlayerList();
-        Inventory inv = Data.getInstance().getLargeGUIInventory();
-        Location dropLocation = Data.getInstance().getDropLocation();
-        new Save(playerList, inv, dropLocation).saveData("./plugins/Revival/Revival.dat");
+        List<OfflinePlayer> playerList = Data.getInstance().getPlayerList();
+//        Inventory inv = Data.getInstance().getLargeGUIInventory();
+//        Location dropLocation = Data.getInstance().getDropLocation();
+        new Save(playerList).saveData("./plugins/Revival/Revival.dat");
         Data.getInstance().getJavaPlugin().getLogger().info("Data saved");
     }
 
-    public void getSave(){
-        Save data = new Save(Objects.requireNonNull(Save.loadData("./plugins/Revival/Revival.dat")));
-        Data.getInstance().setPlayerList(playerList);
-        Data.getInstance().setLargeGUIInventory(data.inv);
-        Data.getInstance().setDropLocation(data.dropLocation);
+    public Save getSave(){
+//        if (!Files.exists(Paths.get("./plugins/Revival/Revival.dat"))) {
+//            return null;
+//        }
+        Save save = new Save(Objects.requireNonNull(Save.loadData("./plugins/Revival/Revival.dat")));
+        Data.getInstance().setPlayerList(save.playerList);
+//        Data.getInstance().setLargeGUIInventory(save.inv);
+//        Data.getInstance().setDropLocation(save.dropLocation);
         Data.getInstance().getJavaPlugin().getLogger().info("Data loaded");
+        return save;
     }
 
 
