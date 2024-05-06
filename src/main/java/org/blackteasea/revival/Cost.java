@@ -4,10 +4,7 @@ package org.blackteasea.revival;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
-import org.bukkit.Bukkit;
-import org.bukkit.Material;
-import org.bukkit.NamespacedKey;
-import org.bukkit.Statistic;
+import org.bukkit.*;
 import org.bukkit.advancement.Advancement;
 import org.bukkit.advancement.AdvancementProgress;
 import org.bukkit.entity.*;
@@ -19,6 +16,7 @@ import javax.naming.Name;
 import javax.xml.stream.events.Namespace;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Cost {
     public static String[]advancementChecks = {
@@ -49,7 +47,7 @@ public class Cost {
         Component response = Component.text("Died ").color(TextColor.color(0xFFFFFF));
         String[] options = {
                 "just now",
-                "a few minutes ago ",
+                "a few minutes ago",
                 "a few hours ago",
                 "a few days ago",
                 "a few weeks ago",
@@ -78,6 +76,25 @@ public class Cost {
         return stats;
     }
 
+    public static float ExpCost(Player player) {
+        int power = getPower(player);
+        int deaths = getDeathCount(player);
+
+        return (int)((power) * (0.15 + 0.02*deaths));
+    }
+
+    public static boolean chargeEXP(Player buyer, Player resurrect){
+        float buyerCurrentExp = buyer.getExp();
+        float Cost = ExpCost(resurrect);
+
+
+        if (buyerCurrentExp < Cost){
+            return false;
+        }
+
+        buyer.setExp(buyerCurrentExp - Cost);
+        return true;
+    }
 
 
 }
