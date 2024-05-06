@@ -6,10 +6,8 @@ import org.bukkit.inventory.Inventory;
 import org.bukkit.util.io.BukkitObjectInputStream;
 import org.bukkit.util.io.BukkitObjectOutputStream;
 
-import java.io.FileInputStream;
-import java.io.FileOutputStream;
-import java.io.IOException;
-import java.io.Serializable;
+import java.io.*;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.zip.GZIPInputStream;
@@ -36,6 +34,12 @@ public class Save implements Serializable {
 
     public boolean saveData(String filePath) {
         try {
+            // Check if the REVIVAL folder exists, if not, create it
+            File folder = new File(filePath).getParentFile();
+            if (!folder.exists()) {
+                folder.mkdirs();
+            }
+
             BukkitObjectOutputStream out = new BukkitObjectOutputStream(new GZIPOutputStream(new FileOutputStream(filePath)));
             out.writeObject(this);
             out.close();
@@ -48,13 +52,22 @@ public class Save implements Serializable {
 
     public static Save loadData(String filePath) {
         try {
-            BukkitObjectInputStream in = new BukkitObjectInputStream(new GZIPInputStream(new FileInputStream(filePath)));
-            Save save = (Save) in.readObject();
-            in.close();
-            return save;
+            File file = new File(filePath);
+            if (!file.exists()) {
+                // If the file doesn't exist, create a new Save object with default values
+                Save defaultSave = new Save(new ArrayList<>(), null, null);
+                defaultSave.saveData(filePath); // Save the default data to the file
+                return defaultSave;
+            } else {
+                // Load data from the file
+                BukkitObjectInputStream in = new BukkitObjectInputStream(new GZIPInputStream(new FileInputStream(filePath)));
+                Save save = (Save) in.readObject();
+                in.close();
+                return save;
+            }
         } catch (ClassNotFoundException | IOException e) {
             e.printStackTrace();
-        };
+        }
         return null;
     }
 
