@@ -29,7 +29,7 @@ public class Data extends PropertyChangeSupport {
         dropEvent = null;
         this.gui = null;
         dropLocation = null;
-        Load loader = new Load();
+        loader = new Load();
     }
 
     public static Data getInstance() {
