@@ -16,12 +16,10 @@ import org.bukkit.event.inventory.InventoryClickEvent;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
+import org.bukkit.inventory.meta.SkullMeta;
 import org.bukkit.scheduler.BukkitRunnable;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.HashMap;
-import java.util.Map;
+import java.util.*;
 
 
 public class Resurrect implements Listener {
@@ -71,17 +69,21 @@ public class Resurrect implements Listener {
         e.setCancelled(true);
 
         final ItemStack clickedItem = e.getCurrentItem();
+        SkullMeta clickedSkull= (SkullMeta)clickedItem.getItemMeta();
+        UUID clickedPlayer = clickedSkull.getOwningPlayer().getUniqueId();
 
         if (clickedItem == null || clickedItem.getType().isAir()) return;
 
         // Checks if they got the stuff
 
 
-        String resurrected = PlainTextComponentSerializer.plainText().serialize(clickedItem.getItemMeta().lore().get(0));
-        OfflinePlayer rezzed = Bukkit.getOfflinePlayer(resurrected);
-        List<OfflinePlayer> playerListCopy = new ArrayList<>(Data.getInstance().getPlayerList());
-        for (OfflinePlayer player : playerListCopy) {
-            if (player.getUniqueId().equals(resurrected)) {
+
+        List<Player> playerListCopy = new ArrayList<>(Data.getInstance().getPlayerList());
+        for (Player player : playerListCopy) {
+            if (player.getUniqueId().equals(clickedPlayer)) {
+                if (!Cost.chargeEXP((Player)user, Data.getInstance().getJavaPlugin().getServer().getPlayer(clickedPlayer))){
+                    return;
+                }
                 Location loc = Data.getInstance().getDropLocation();
                 if (loc == null) return;
                 if (!player.isOnline()){

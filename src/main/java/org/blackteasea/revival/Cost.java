@@ -16,6 +16,7 @@ import javax.naming.Name;
 import javax.xml.stream.events.Namespace;
 import java.util.ArrayList;
 import java.util.List;
+import java.util.UUID;
 
 public class Cost {
     public static String[]advancementChecks = {
@@ -76,6 +77,25 @@ public class Cost {
         return stats;
     }
 
+    public static float ExpCost(Player player) {
+        int power = getPower(player);
+        int deaths = getDeathCount(player);
+
+        return (int)((power) * (0.15 + 0.02*deaths));
+    }
+
+    public static boolean chargeEXP(Player buyer, Player resurrect){
+        float buyerCurrentExp = buyer.getExp();
+        float Cost = ExpCost(resurrect);
+
+
+        if (buyerCurrentExp < Cost){
+            return false;
+        }
+
+        buyer.setExp(buyerCurrentExp - Cost);
+        return true;
+    }
 
 
 }
