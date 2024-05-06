@@ -75,12 +75,12 @@ public class Save implements Serializable {
         List<Player> playerList = Data.getInstance().getPlayerList();
         Inventory inv = Data.getInstance().getLargeGUIInventory();
         Location dropLocation = Data.getInstance().getDropLocation();
-        new Save(playerList, inv, dropLocation).saveData("./Revival.dat");
+        new Save(playerList, inv, dropLocation).saveData("./plugins/Revival/Revival.dat");
         Data.getInstance().getJavaPlugin().getLogger().info("Data saved");
     }
 
     public void getSave(){
-        Save data = new Save(Objects.requireNonNull(Save.loadData("./Revival.dat")));
+        Save data = new Save(Objects.requireNonNull(Save.loadData("./plugins/Revival/Revival.dat")));
         Data.getInstance().setPlayerList(playerList);
         Data.getInstance().setLargeGUIInventory(data.inv);
         Data.getInstance().setDropLocation(data.dropLocation);
