@@ -21,12 +21,15 @@ public class Data extends PropertyChangeSupport {
     private CostGUI costgui;
 
     private Location dropLocation;
+
+    private Load loader;
     private Data() {
         super(new Object());
         playerList = new ArrayList<>();
         dropEvent = null;
         this.gui = null;
         dropLocation = null;
+        Load loader = new Load();
     }
 
     public static Data getInstance() {
@@ -54,6 +57,10 @@ public class Data extends PropertyChangeSupport {
 
     public List<Player> getPlayerList() {
         return this.playerList;
+    }
+
+    public void setPlayerList(List<Player> players) {
+        this.playerList.addAll(players);
     }
 
     public PlayerDropItemEvent getDropEvent() {
@@ -98,6 +105,14 @@ public class Data extends PropertyChangeSupport {
 
     public Location getDropLocation() {
         return this.dropLocation;
+    }
+
+    public Load getLoader() {
+        return this.loader;
+    }
+
+    public void setLoader(Load loader) {
+        this.loader = loader;
     }
 
 }

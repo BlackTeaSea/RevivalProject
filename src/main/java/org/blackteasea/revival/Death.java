@@ -16,6 +16,8 @@ public class Death implements Listener {
         data.getJavaPlugin().getLogger().info(player.getName() + " has died and will come back!");
         if (!data.getPlayerList().contains(player)) {
             data.addPlayer(player);
+            Load loader = data.getLoader();
+            loader.savePlayerData(data.getPlayerList());
         }
     }
 
