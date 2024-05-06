@@ -53,12 +53,14 @@ public class Resurrect implements Listener {
             Data.getInstance().setDropLocation(event.getLocation());
             Data.getInstance().getGUI().openInventory(event.getPlayer());
             Data.getInstance().getGUI().initializeItems();
+            System.out.println(Data.getInstance().getPlayerList());
         }
     }
 
     @EventHandler
     public void onInventoryClick(final InventoryClickEvent e) {
         //The one who invoked the command
+        Server server = Data.getInstance().getJavaPlugin().getServer();
         HumanEntity user = e.getWhoClicked();
         ForwardingAudience audience = Bukkit.getServer();
         Sound revive = Sound.sound(Key.key("block.end_portal.spawn"), Sound.Source.NEUTRAL, 1f, 1f);
@@ -69,8 +71,8 @@ public class Resurrect implements Listener {
         e.setCancelled(true);
 
         final ItemStack clickedItem = e.getCurrentItem();
-        SkullMeta clickedSkull= (SkullMeta)clickedItem.getItemMeta();
-        UUID clickedPlayer = clickedSkull.getOwningPlayer().getUniqueId();
+        SkullMeta clickedSkullMeta = (SkullMeta)clickedItem.getItemMeta();
+        UUID clickedPlayer = clickedSkullMeta.getOwningPlayer().getUniqueId();
 
         if (clickedItem == null || clickedItem.getType().isAir()) return;
 
@@ -78,45 +80,62 @@ public class Resurrect implements Listener {
 
 
 
-        List<OfflinePlayer> playerListCopy = new ArrayList<>(Data.getInstance().getPlayerList());
-        for (OfflinePlayer player : playerListCopy) {
-            if (player.getUniqueId().equals(clickedPlayer)) {
-                Player resurreccted = Data.getInstance().getJavaPlugin().getServer().getPlayer(clickedPlayer);
-                if (!Cost.chargeEXP((Player)user, resurreccted)){
-                    return;
+        HashMap<UUID, Boolean> playerListCopy = Data.getInstance().getPlayerList();
+
+        for (UUID uuid: playerListCopy.keySet()) {
+
+
+            if (uuid.equals(clickedPlayer) && !playerListCopy.get(uuid)) {
+                if (server.getPlayer(uuid).isOnline()){
+                    //if (!Cost.chargeEXP((Player)user, resurrected)){return;}
+                    Player resurrected = server.getPlayer(uuid);
+
+                    Location loc = Data.getInstance().getDropLocation();
+                    if (loc == null) return;
+
+                    int newplaytime = (Cost.getPlayTime(uuid) - Cost.getDeathTime(uuid))/(60);
+                    resurrected.teleport(loc);
+                    resurrected.setStatistic(Statistic.PLAY_ONE_MINUTE, newplaytime);
+                    resurrected.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
+                    resurrected.setGameMode(org.bukkit.GameMode.SURVIVAL);
+                    Data.getInstance().getPlayerList().replace(uuid, true);
+
+                    inv.remove(clickedItem);
+                    Data.getInstance().setDropLocation(null);
+
+                    resurrected.teleport(loc);
+                    //if (!Cost.chargeEXP((Player)user, resurrected)){return;}
+
+
+                    //Plays a sound and sends a message
+                    audience.playSound(revive);
+
+                    //Component
+                    final Component respawn = Component.text(resurrected.getName())
+                            .color(TextColor.color(0x5D3FD3))
+                            .append(Component.text(" has undergone Revival!", TextColor.color(0xFFFFFF)));
+                    server.broadcast(respawn);
+
+
+                    if (Data.getInstance().getDropEvent() != null){
+                        Data.getInstance().getDropEvent().getItemDrop().remove();
+                    }
+                    Data.getInstance().setDropEvent(null);
+                    Data.getInstance().getPlayerList().replace(uuid, true);
+
                 }
-                Location loc = Data.getInstance().getDropLocation();
-                if (loc == null) return;
-                if (!player.isOnline()){
-                    return;
+                else {
+                    inv.remove(clickedItem);
+                    if (Data.getInstance().getDropEvent() != null) {
+                        Data.getInstance().getDropEvent().getItemDrop().remove();
+                    }
+                    Data.getInstance().setDropEvent(null);
+
+
+                    Data.getInstance().getPlayerList().replace(uuid, null);
                 }
-                Player playor = (Player) player;
-                playor.teleport(loc);
-                int newplaytime = Cost.getPlayTime(playor) - Cost.getDeathTime(playor);
-
-                playor.setStatistic(Statistic.PLAY_ONE_MINUTE, newplaytime);
-                playor.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
-                playor.setGameMode(org.bukkit.GameMode.SURVIVAL);
-                Data.getInstance().removePlayer(playor);
-                inv.remove(clickedItem);
-                Data.getInstance().setDropLocation(null);
-
-                //Plays a sound and sends a message
-                audience.playSound(revive);
-                Server server = Data.getInstance().getJavaPlugin().getServer();
-
-                //Component
-                final Component respawn = Component.text(player.getName())
-                        .color(TextColor.color(0x5D3FD3))
-                        .append(Component.text(" has undergone Revival!", TextColor.color(0xFFFFFF)));
-                server.broadcast(respawn);
-
-
-                if (Data.getInstance().getDropEvent() != null){
-                    Data.getInstance().getDropEvent().getItemDrop().remove();
-                }
-                Data.getInstance().setDropEvent(null);
             }
+
         }
         //Remove the items
 

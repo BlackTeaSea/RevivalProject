@@ -5,6 +5,7 @@ import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
 import org.bukkit.OfflinePlayer;
+import org.bukkit.Server;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -12,10 +13,7 @@ import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
 import org.jetbrains.annotations.NotNull;
 
-import java.util.ArrayList;
-import java.util.Arrays;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 
 public class GUI {
 
@@ -35,24 +33,30 @@ public class GUI {
 
     public void initializeItems() {
         // Add the items to the inventory
+        HashMap<UUID, Boolean> playerListCopy = Data.getInstance().getPlayerList();
+
         inv.clear();
-        for (OfflinePlayer player : Data.getInstance().getPlayerList()) {
-            inv.addItem(createSkullItem(player));
+        for (UUID uuid : playerListCopy.keySet()) {
+            if(!playerListCopy.get(uuid)) {
+                inv.addItem(createSkullItem(uuid));
+            }
         }
     }
 
-    public @NotNull ItemStack createSkullItem(OfflinePlayer player) {
+    public @NotNull ItemStack createSkullItem(UUID uuid) {
         //This is nice --- Chris
+        Server server = Data.getInstance().getJavaPlugin().getServer();
+
         final ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1);
         final SkullMeta meta = (SkullMeta) skull.getItemMeta();
-        meta.setOwningPlayer(player);
+        meta.setOwningPlayer(server.getOfflinePlayer(uuid));
         skull.setItemMeta(meta);
 
         //...But I like this better --- Chris
 
         List<Component> infolore = new ArrayList<Component>();
 
-        final Component playername = Component.text(Objects.requireNonNull(player.getPlayer()).getName())
+        final Component playername = Component.text(Objects.requireNonNull(server.getOfflinePlayer(uuid).getName()))
                 .color(TextColor.color(0xFFFFFF))
                 .decoration(TextDecoration.BOLD, true);
 
@@ -60,7 +64,7 @@ public class GUI {
         infolore.add(playername);
 
         //Adds statistics
-        infolore.addAll(Cost.StatComponent(player));
+        infolore.addAll(Cost.StatComponent(uuid));
 
         skull.lore(infolore);
         return skull;

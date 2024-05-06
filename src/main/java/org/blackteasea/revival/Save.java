@@ -1,5 +1,6 @@
 package org.blackteasea.revival;
 
+import it.unimi.dsi.fastutil.Hash;
 import org.bukkit.Location;
 import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.Player;
@@ -10,9 +11,7 @@ import org.bukkit.util.io.BukkitObjectOutputStream;
 import java.io.*;
 import java.nio.file.Files;
 import java.nio.file.Paths;
-import java.util.ArrayList;
-import java.util.List;
-import java.util.Objects;
+import java.util.*;
 import java.util.zip.GZIPInputStream;
 import java.util.zip.GZIPOutputStream;
 
@@ -20,8 +19,8 @@ public class Save implements Serializable {
 
     private static transient final long serialVersionUID = -1681012206529286330L;
 
-    public final List<OfflinePlayer> playerList;
-    public Save(List<OfflinePlayer> playerList){
+    public final HashMap<UUID, Boolean> playerList;
+    public Save(HashMap<UUID, Boolean> playerList){
         this.playerList = playerList;
     }
 
@@ -70,7 +69,8 @@ public class Save implements Serializable {
     }
 
     public void setSave(){
-        List<OfflinePlayer> playerList = Data.getInstance().getPlayerList();
+        HashMap<UUID, Boolean> playerList = Data.getInstance().getPlayerList();
+
         new Save(playerList).saveData("./plugins/Revival/Revival.dat");
         Data.getInstance().getJavaPlugin().getLogger().info("Data saved");
     }

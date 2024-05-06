@@ -1,6 +1,6 @@
 package org.blackteasea.revival;
 
-//Calculates the price of revival based on that dead player's achievements
+//Calculates the price of revival based on that dead server.getPlayer(uuid)'s achievements
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
@@ -18,6 +18,8 @@ import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;
 
+    
+    
 public class Cost {
     public static String[]advancementChecks = {
             "end/kill_dragon",
@@ -26,22 +28,24 @@ public class Cost {
             "adventure/adventuring_time",
             "adventure/sniper_duel"
             };
+    private static final Server server = Data.getInstance().getJavaPlugin().getServer();
+    
 
 
-    public static int getDeathTime(OfflinePlayer player){return player.getStatistic(Statistic.TIME_SINCE_DEATH)/20;}
-    public static int getDeathCount(OfflinePlayer player) {return player.getStatistic(Statistic.DEATHS);}
-    public static int getPlayTime(OfflinePlayer player) {return player.getStatistic(Statistic.PLAY_ONE_MINUTE)/20;};
+    public static int getDeathTime(UUID uuid){return server.getPlayer(uuid).getStatistic(Statistic.TIME_SINCE_DEATH)/20;}
+    public static int getDeathCount(UUID uuid) {return server.getPlayer(uuid).getStatistic(Statistic.DEATHS);}
+    public static int getPlayTime(UUID uuid) {return server.getPlayer(uuid).getStatistic(Statistic.PLAY_ONE_MINUTE)/20;};
 
-    public static int getPower(OfflinePlayer player){
-        int timeAlive = (getPlayTime(player) - getDeathTime(player))/(60);
-        int score = player.getPlayer().getTotalExperience();
+    public static int getPower(UUID uuid){
+        int timeAlive = (getPlayTime(uuid) - getDeathTime(uuid))/(60);
+        int score = server.getPlayer(uuid).getPlayer().getTotalExperience();
 
 
         return score + timeAlive;
     }
 
-    public static Component displayPower(OfflinePlayer player){
-        return Component.text(getPower(player) + " power").color(TextColor.color(0x7FFFD4));
+    public static Component displayPower(UUID uuid){
+        return Component.text(getPower(uuid) + " power").color(TextColor.color(0x7FFFD4));
     }
 
     public static Component cleanDeathTime(int seconds) {
@@ -67,35 +71,38 @@ public class Cost {
 
 
 
-    public static List<Component> StatComponent (OfflinePlayer player) {
+    public static List<Component> StatComponent (UUID uuid) {
         ArrayList<Component> stats = new ArrayList<>();
         //Statistics
-        stats.add(Component.text(getDeathCount(player) + " Deaths").color(TextColor.color(0xFFFFFF)));
-        stats.add(cleanDeathTime(getDeathTime(player)));
-        stats.add(displayPower(player));
+        stats.add(Component.text(getDeathCount(uuid) + " Deaths").color(TextColor.color(0xFFFFFF)));
+        stats.add(cleanDeathTime(getDeathTime(uuid)));
+        stats.add(displayPower(uuid));
 
         return stats;
     }
 
-    public static float ExpCost(Player player) {
-        int power = getPower(player);
-        int deaths = getDeathCount(player);
+    public static float ExpCost(UUID uuid) {
+        int power = getPower(uuid);
+        int deaths = getDeathCount(uuid);
 
         return (int)((power) * (0.15 + 0.02*deaths));
     }
 
-    public static boolean chargeEXP(Player buyer, Player resurrect){
-        float buyerCurrentExp = buyer.getExp();
-        float Cost = ExpCost(resurrect);
-
-
-        if (buyerCurrentExp < Cost){
-            return false;
-        }
-
-        buyer.setExp(buyerCurrentExp - Cost);
-        return true;
-    }
+//    public static boolean chargeEXP(UUID buyer, UUID resurrect){
+//        Player buyerPlayer = server.getPlayer(buyer);
+//        OfflinePlayer resurrectPlayer = server.getOfflinePlayer(
+//
+//        float buyerCurrentExp = buyer.getExp();
+//        float Cost = ExpCost(resurrect);
+//
+//
+//        if (buyerCurrentExp < Cost){
+//            return false;
+//        }
+//
+//        buyer.setExp(buyerCurrentExp - Cost);
+//        return true;
+//    }
 
 
 }
