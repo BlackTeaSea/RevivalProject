@@ -1,4 +1,5 @@
 # RevivalProject
+
 Minecraft Hardcore Revival Plugin
 
 Revive your fallen comrades in the unforgiving world of Minecraft Hardcore with our revolutionary plugin! Harness the power of ancient rituals and craft mystical items to bring your friends back from the brink of oblivion.
