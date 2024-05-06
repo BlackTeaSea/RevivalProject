@@ -81,7 +81,8 @@ public class Resurrect implements Listener {
         List<OfflinePlayer> playerListCopy = new ArrayList<>(Data.getInstance().getPlayerList());
         for (OfflinePlayer player : playerListCopy) {
             if (player.getUniqueId().equals(clickedPlayer)) {
-                if (!Cost.chargeEXP((Player)user, Data.getInstance().getJavaPlugin().getServer().getPlayer(clickedPlayer))){
+                Player resurreccted = Data.getInstance().getJavaPlugin().getServer().getPlayer(clickedPlayer);
+                if (!Cost.chargeEXP((Player)user, resurreccted)){
                     return;
                 }
                 Location loc = Data.getInstance().getDropLocation();

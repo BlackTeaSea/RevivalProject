@@ -34,8 +34,8 @@ public class Cost {
 
     public static int getPower(OfflinePlayer player){
         int timeAlive = (getPlayTime(player) - getDeathTime(player))/(60);
-//        int score = player.getTotalExperience();
-        int score = 1;
+        int score = player.getPlayer().getTotalExperience();
+
 
         return score + timeAlive;
     }
