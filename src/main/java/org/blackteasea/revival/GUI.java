@@ -4,6 +4,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
 import org.bukkit.Material;
+import org.bukkit.OfflinePlayer;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
@@ -14,6 +15,7 @@ import org.jetbrains.annotations.NotNull;
 import java.util.ArrayList;
 import java.util.Arrays;
 import java.util.List;
+import java.util.Objects;
 
 public class GUI {
 
@@ -34,12 +36,12 @@ public class GUI {
     public void initializeItems() {
         // Add the items to the inventory
         inv.clear();
-        for (Player player : Data.getInstance().getPlayerList()) {
+        for (OfflinePlayer player : Data.getInstance().getPlayerList()) {
             inv.addItem(createSkullItem(player));
         }
     }
 
-    public @NotNull ItemStack createSkullItem(Player player) {
+    public @NotNull ItemStack createSkullItem(OfflinePlayer player) {
         //This is nice --- Chris
         final ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1);
         final SkullMeta meta = (SkullMeta) skull.getItemMeta();
@@ -50,7 +52,7 @@ public class GUI {
 
         List<Component> infolore = new ArrayList<Component>();
 
-        final Component playername = Component.text(player.getName())
+        final Component playername = Component.text(Objects.requireNonNull(player.getPlayer()).getName())
                 .color(TextColor.color(0xFFFFFF))
                 .decoration(TextDecoration.BOLD, true);
 

@@ -28,18 +28,19 @@ public class Cost {
             };
 
 
-    public static int getDeathTime(Player player){return player.getStatistic(Statistic.TIME_SINCE_DEATH)/20;}
-    public static int getDeathCount(Player player) {return player.getStatistic(Statistic.DEATHS);}
-    public static int getPlayTime(Player player) {return player.getStatistic(Statistic.PLAY_ONE_MINUTE)/20;};
+    public static int getDeathTime(OfflinePlayer player){return player.getStatistic(Statistic.TIME_SINCE_DEATH)/20;}
+    public static int getDeathCount(OfflinePlayer player) {return player.getStatistic(Statistic.DEATHS);}
+    public static int getPlayTime(OfflinePlayer player) {return player.getStatistic(Statistic.PLAY_ONE_MINUTE)/20;};
 
-    public static int getPower(Player player){
+    public static int getPower(OfflinePlayer player){
         int timeAlive = (getPlayTime(player) - getDeathTime(player))/(60);
-        int score = player.getTotalExperience();
+//        int score = player.getTotalExperience();
+        int score = 1;
 
         return score + timeAlive;
     }
 
-    public static Component displayPower(Player player){
+    public static Component displayPower(OfflinePlayer player){
         return Component.text(getPower(player) + " power").color(TextColor.color(0x7FFFD4));
     }
 
@@ -66,7 +67,7 @@ public class Cost {
 
 
 
-    public static List<Component> StatComponent (Player player) {
+    public static List<Component> StatComponent (OfflinePlayer player) {
         ArrayList<Component> stats = new ArrayList<>();
         //Statistics
         stats.add(Component.text(getDeathCount(player) + " Deaths").color(TextColor.color(0xFFFFFF)));
