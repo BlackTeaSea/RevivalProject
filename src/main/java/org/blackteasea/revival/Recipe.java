@@ -17,8 +17,9 @@ import net.kyori.adventure.text.format.TextDecoration;
 import net.md_5.bungee.api.ChatColor;
 import net.md_5.bungee.api.chat.hover.content.Item;
 
+//this class makes recipe for totem of revival
 public class Recipe {
-    
+    //represents a shaped crafting recipe
     public static ShapedRecipe totemRecipe(){
 
         ItemStack respawnerTotem = new ItemStack(Material.NETHER_STAR, 1);
@@ -28,8 +29,6 @@ public class Recipe {
         totemMeta.displayName(totemName);
 
         List<Component> infolore = new ArrayList<Component>();
-
-
 
         final Component revivalName = Component.text("Drop in a villager well")
                 .color(TextColor.color(0x2708A0))
@@ -41,12 +40,20 @@ public class Recipe {
         respawnerTotem.lore(infolore);
         ShapedRecipe recipe = new ShapedRecipe(new NamespacedKey(Data.getInstance().getJavaPlugin(), "Totem"), respawnerTotem);
 
-        recipe.shape (" X ", 
-                      " X ",
-                      " X ");
-        recipe.setIngredient('X', Material.NETHER_STAR);
+        recipe.shape ("NTN",
+                "RXR",
+                "NBN");
+        recipe.setIngredient('X', Material.END_CRYSTAL);
+        recipe.setIngredient('N', Material.NETHERITE_INGOT);
+        recipe.setIngredient('R', Material.ROTTEN_FLESH);
+        recipe.setIngredient('T', Material.TOTEM_OF_UNDYING);
+        recipe.setIngredient('B', Material.EXPERIENCE_BOTTLE);
 
         return recipe;
     }
+
+    // public static ShapedRecipe compassRecipe(){}
+
+
 
 }
