@@ -49,7 +49,7 @@ public class Data extends PropertyChangeSupport {
         this.plugin = plugin;
     }
     public void addPlayer(UUID playerUUID) {
-        this.playerList.put(playerUUID, true);
+        this.playerList.put(playerUUID, Boolean.TRUE);
     }
     public void removePlayer(UUID playerUUID) {
         this.playerList.remove(playerUUID);

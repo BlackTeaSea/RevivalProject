@@ -1,6 +1,5 @@
 package org.blackteasea.revival;
 
-import it.unimi.dsi.fastutil.Hash;
 import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
@@ -11,12 +10,12 @@ import org.bukkit.Location;
 import org.bukkit.Server;
 import org.bukkit.Statistic;
 import org.bukkit.entity.Player;
-import org.bukkit.event.Event;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
 import java.util.HashMap;
+import java.util.Objects;
 import java.util.UUID;
 
 public class ReconnectListener implements Listener {
@@ -43,16 +42,17 @@ public class ReconnectListener implements Listener {
 
         Location loc = Data.getInstance().getDropLocation();
         if (loc == null) {
-            server.getPlayer(e).teleport(server.getWorld(e).getSpawnLocation());
+            Objects.requireNonNull(server.getPlayer(e)).teleport(Objects.requireNonNull(server.getWorld(e)).getSpawnLocation());
             return;
         }
 
         int newplaytime = (Cost.getPlayTime(e) - Cost.getDeathTime(e))/(60);
+        assert resurrected != null;
         resurrected.teleport(loc);
         resurrected.setStatistic(Statistic.PLAY_ONE_MINUTE, newplaytime);
         resurrected.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
         resurrected.setGameMode(org.bukkit.GameMode.SURVIVAL);
-        Data.getInstance().getPlayerList().replace(e, true);
+        Data.getInstance().getPlayerList().replace(e, Boolean.TRUE);
         
         Data.getInstance().setDropLocation(null);
 

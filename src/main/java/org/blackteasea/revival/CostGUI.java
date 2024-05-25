@@ -20,6 +20,5 @@ public class CostGUI {
         inv.clear();
         inv.setItem(46, new ItemStack(Material.RED_STAINED_GLASS, 1));
         inv.setItem(54, new ItemStack(Material.LIME_STAINED_GLASS, 1));
-
     }
 }

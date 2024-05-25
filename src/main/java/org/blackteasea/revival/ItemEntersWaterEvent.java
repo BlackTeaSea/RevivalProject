@@ -5,14 +5,13 @@ import org.bukkit.entity.Item;
 import org.bukkit.entity.Player;
 import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
-import org.bukkit.event.player.PlayerDropItemEvent;
 import org.jetbrains.annotations.NotNull;
 
 public class ItemEntersWaterEvent extends Event {
     private static final HandlerList HANDLER_LIST = new HandlerList();
-    private Item item;
-    private Location location;
-    private Player player;
+    private final Item item;
+    private final Location location;
+    private final Player player;
 
     public ItemEntersWaterEvent(Item item, Player player) {
         this.item = item;
