@@ -30,7 +30,6 @@ public class Data extends PropertyChangeSupport {
     private Data() {
         super(new Object());
         playerList = new HashMap<>();
-
         dropEvent = null;
         this.gui = null;
         dropLocation = null;

@@ -37,6 +37,7 @@ public class GUI {
 
         inv.clear();
         for (UUID uuid : playerListCopy.keySet()) {
+            System.out.println(playerListCopy.get(uuid));
             if(!playerListCopy.get(uuid)) {
                 inv.addItem(createSkullItem(uuid));
             }
