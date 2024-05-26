@@ -54,7 +54,5 @@ public class ReconnectListener implements Listener {
         assert server.getPlayer(e) != null;
         TestRes.resurrect(e, loc);
 
-        Data.getInstance().setDropEvent(null);
-
     }
 }

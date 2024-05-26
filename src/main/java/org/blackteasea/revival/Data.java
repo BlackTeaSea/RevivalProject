@@ -1,6 +1,5 @@
 package org.blackteasea.revival;
 
-//import org.blackteasea.revival.Experimental.Save;
 import org.blackteasea.revival.GUI.CostGUI;
 import org.blackteasea.revival.GUI.GUI;
 import org.bukkit.Location;
@@ -12,6 +11,8 @@ import org.yaml.snakeyaml.Yaml;
 
 import java.beans.PropertyChangeSupport;
 import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
 import java.util.*;
 
 import static org.bukkit.Bukkit.createInventory;
@@ -19,7 +20,6 @@ import static org.bukkit.Bukkit.createInventory;
 public class Data extends PropertyChangeSupport {
     private static Data instance;
     private JavaPlugin plugin;
-    private PlayerDropItemEvent dropEvent;
     private HashMap<UUID, Boolean> playerList;
     private Inventory inv;
     private Inventory costinv;
@@ -28,14 +28,12 @@ public class Data extends PropertyChangeSupport {
     private Location dropLocation;
     //private Save loader;
 
-    Yaml yaml = new Yaml();
-    File StorageDocument;
+    File storageDocument;
 
     private Data() {
         super(new Object());
         playerList = new HashMap<>();
 
-        dropEvent = null;
         this.gui = null;
         dropLocation = null;
         //loader = null;
@@ -66,13 +64,6 @@ public class Data extends PropertyChangeSupport {
 //        this.playerList = players;
 //    }
     //Event
-    public PlayerDropItemEvent getDropEvent() {
-        return this.dropEvent;
-    }
-    public void setDropEvent(PlayerDropItemEvent event) {
-        this.dropEvent = event;
-    }
-
     public Inventory getGUIInventory() {
         if (this.inv == null) {
             this.inv = createInventory(null, 9, "Resurrect");
@@ -129,7 +120,7 @@ public class Data extends PropertyChangeSupport {
     public InputStream getIO(){
         InputStream io;
         try{
-            io = new FileInputStream(StorageDocument.getName());
+            io = Files.newInputStream(Paths.get(storageDocument.getName()));
         } catch (Exception e){
             System.out.println("?No.");
             return null;
@@ -164,26 +155,36 @@ public class Data extends PropertyChangeSupport {
         return readEntry(uuid);
     }
 
-    public void save(){
-        HashMap<String, Boolean> copy = new HashMap<>();
-        for(UUID uuid : playerList.keySet()){
-            copy.put(uuid.toString(), readEntry(uuid));
+    public void save() {
+        Map<String, Boolean> copy = new HashMap<>();
+        for (UUID uuid : playerList.keySet()) {
+            copy.put(uuid.toString(), playerList.get(uuid));
         }
-
-        yaml.dump(copy, getWriter());
+        Yaml yaml = new Yaml();
+        try (Writer writer = new FileWriter("./plugins/storage.yaml")) {
+            yaml.dump(copy, writer);
+        } catch (IOException e) {
+            plugin.getLogger().severe("Failed to save data: " + e.getMessage());
+        }
     }
-    public void load(String filepath){
-        yaml = new Yaml();
-        this.StorageDocument  = new File(filepath);
-        try{
-            if(!StorageDocument.createNewFile() && yaml != null){
-                HashMap<String, Boolean> copy = yaml.load(getIO());
-                for(String uuid : copy.keySet()){
-                    playerList.put(UUID.fromString(uuid), copy.get(uuid));
+    public void load(String filepath) {
+        Yaml yaml = new Yaml();
+        this.storageDocument = new File(filepath);
+        try {
+            if (!storageDocument.exists() && !storageDocument.createNewFile()) {
+                plugin.getLogger().warning("Could not create new storage file.");
+            } else {
+                try (InputStream io = Files.newInputStream(storageDocument.toPath())) {
+                    Map<String, Boolean> copy = yaml.load(io);
+                    if (copy != null) {
+                        for (Map.Entry<String, Boolean> entry : copy.entrySet()) {
+                            playerList.put(UUID.fromString(entry.getKey()), entry.getValue());
+                        }
+                    }
                 }
             }
-        } catch (Exception e){
-            System.out.println(e);
+        } catch (IOException e) {
+            plugin.getLogger().severe("Failed to load data: " + e.getMessage());
         }
     }
     public HashMap<UUID, Boolean> readAllEntries(){
