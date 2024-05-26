@@ -1,4 +1,4 @@
-package org.blackteasea.revival;
+package org.blackteasea.revival.Experimental;
 
 import org.bukkit.Location;
 import org.bukkit.entity.Item;
@@ -7,13 +7,17 @@ import org.bukkit.event.Event;
 import org.bukkit.event.HandlerList;
 import org.jetbrains.annotations.NotNull;
 
-public class ItemEntersWaterEvent extends Event {
-    private static final HandlerList HANDLER_LIST = new HandlerList();
-    private final Item item;
-    private final Location location;
-    private final Player player;
+import java.util.UUID;
 
-    public ItemEntersWaterEvent(Item item, Player player) {
+public class ReconnectEvent extends Event {
+    private static final HandlerList HANDLER_LIST = new HandlerList();
+    //Above here
+
+    private Item item;
+    private Location location;
+    private Player player;
+
+    public ReconnectEvent(UUID uuid, Location location) {
         this.item = item;
         this.location = item.getLocation();
         this.player = player;
@@ -31,6 +35,7 @@ public class ItemEntersWaterEvent extends Event {
         return player;
     }
 
+    //Important
     @Override
     public @NotNull HandlerList getHandlers() {
         return HANDLER_LIST;
@@ -40,3 +45,4 @@ public class ItemEntersWaterEvent extends Event {
         return HANDLER_LIST;
     }
 }
+

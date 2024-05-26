@@ -1,19 +1,12 @@
-package org.blackteasea.revival;
+package org.blackteasea.revival.functions;
 
 //Calculates the price of revival based on that dead server.getPlayer(uuid)'s achievements
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
+import org.blackteasea.revival.Data;
 import org.bukkit.*;
-import org.bukkit.advancement.Advancement;
-import org.bukkit.advancement.AdvancementProgress;
-import org.bukkit.entity.*;
-import org.bukkit.inventory.Inventory;
-import org.bukkit.inventory.ItemStack;
-import org.w3c.dom.Text;
 
-import javax.naming.Name;
-import javax.xml.stream.events.Namespace;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.UUID;

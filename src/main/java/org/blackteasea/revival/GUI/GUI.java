@@ -1,13 +1,13 @@
-package org.blackteasea.revival;
+package org.blackteasea.revival.GUI;
 
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.blackteasea.revival.functions.Cost;
+import org.blackteasea.revival.Data;
 import org.bukkit.Material;
-import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 import org.bukkit.inventory.meta.SkullMeta;
@@ -33,11 +33,11 @@ public class GUI {
 
     public void initializeItems() {
         // Add the items to the inventory
-        HashMap<UUID, Boolean> playerListCopy = Data.getInstance().getPlayerList();
+        HashMap<UUID, Boolean> playerList = Data.getInstance().readAllEntries();
 
         inv.clear();
-        for (UUID uuid : playerListCopy.keySet()) {
-            if(!playerListCopy.get(uuid)) {
+        for (UUID uuid : playerList.keySet()) {
+            if(!playerList.get(uuid)) {
                 inv.addItem(createSkullItem(uuid));
             }
         }

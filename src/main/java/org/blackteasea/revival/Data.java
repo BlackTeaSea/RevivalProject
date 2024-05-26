@@ -1,17 +1,18 @@
 package org.blackteasea.revival;
 
-import org.bukkit.Bukkit;
+//import org.blackteasea.revival.Experimental.Save;
+import org.blackteasea.revival.GUI.CostGUI;
+import org.blackteasea.revival.GUI.GUI;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.yaml.snakeyaml.Yaml;
+
+
 import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.io.*;
+import java.util.*;
 
 import static org.bukkit.Bukkit.createInventory;
 
@@ -25,7 +26,12 @@ public class Data extends PropertyChangeSupport {
     private GUI gui;
     private CostGUI costgui;
     private Location dropLocation;
-    private Save loader;
+    //private Save loader;
+
+    Yaml yaml = new Yaml();
+    File StorageDocument;
+
+    private List<UUID> dead;
 
     private Data() {
         super(new Object());
@@ -34,7 +40,7 @@ public class Data extends PropertyChangeSupport {
         dropEvent = null;
         this.gui = null;
         dropLocation = null;
-        loader = null;
+        //loader = null;
     }
     public static Data getInstance() {
         if (instance == null) {
@@ -48,24 +54,27 @@ public class Data extends PropertyChangeSupport {
     public void setJavaPlugin(JavaPlugin plugin) {
         this.plugin = plugin;
     }
-    public void addPlayer(UUID playerUUID) {
-        this.playerList.put(playerUUID, Boolean.TRUE);
-    }
-    public void removePlayer(UUID playerUUID) {
-        this.playerList.remove(playerUUID);
-    }
-    public HashMap<UUID, Boolean> getPlayerList() {
-        return this.playerList;
-    }
-    public void setPlayerList(HashMap<UUID, Boolean> players) {
-        this.playerList = players;
-    }
+
+//    public void addPlayer(UUID playerUUID) {
+//        this.playerList.put(playerUUID, Boolean.TRUE);
+//    }
+//    public void removePlayer(UUID playerUUID) {
+//        this.playerList.remove(playerUUID);
+//    }
+//    public HashMap<UUID, Boolean> getPlayerList() {
+//        return this.playerList;
+//    }
+//    public void setPlayerList(HashMap<UUID, Boolean> players) {
+//        this.playerList = players;
+//    }
+    //Event
     public PlayerDropItemEvent getDropEvent() {
         return this.dropEvent;
     }
     public void setDropEvent(PlayerDropItemEvent event) {
         this.dropEvent = event;
     }
+
     public Inventory getGUIInventory() {
         if (this.inv == null) {
             this.inv = createInventory(null, 9, "Resurrect");
@@ -99,11 +108,80 @@ public class Data extends PropertyChangeSupport {
     public Location getDropLocation() {
         return this.dropLocation;
     }
-    public Save getLoader(){
-        return this.loader;
+//    public Save getLoader(){
+//        return this.loader;
+//    }
+//    public void setLoader(Save loader) {
+//        this.loader = loader;
+//    }
+
+    //YAML Storage
+    public void initYaml(String filepath){
+        yaml = new Yaml();
+        this.StorageDocument  = new File(filepath);
+        try{
+            StorageDocument.createNewFile();
+        } catch (Exception e){
+            System.out.println(e);
+        }
     }
-    public void setLoader(Save loader) {
-        this.loader = loader;
+    public Writer getWriter(){
+        Writer writer;
+        try{
+            writer = new FileWriter(StorageDocument.getName());
+        } catch (Exception e){
+            System.out.println("No");
+            return null;
+        }
+        return writer;
+
+    }
+    public InputStream getIO(){
+        InputStream io;
+        try{
+            io = new FileInputStream(StorageDocument.getName());
+        } catch (Exception e){
+            System.out.println("?No.");
+            return null;
+        }
+        return io;
+    }
+
+    public void createEntry(UUID uuid, boolean revived){
+        if(!playerList.containsKey(uuid)){
+            return;
+        }
+        playerList.put(uuid, revived);
+    }
+    public boolean readEntry(UUID uuid){
+        return playerList.get(uuid);
+    }
+
+
+    public void updateEntry(UUID uuid, boolean revived){
+        playerList.replace(uuid, revived);
+    }
+    public void deleteEntry(UUID uuid){
+        playerList.remove(uuid);
+    }
+    public boolean checkEntry(UUID uuid){
+        return playerList.containsKey(uuid);
+    }
+    public boolean checkRevived(UUID uuid){
+        if(!playerList.containsKey(uuid)){
+            return false;
+        }
+        return readEntry(uuid);
+    }
+
+    public void save(){
+        yaml.dump(playerList, getWriter());
+    }
+    public void load(){
+        playerList = yaml.load(getIO());
+    }
+    public HashMap<UUID, Boolean> readAllEntries(){
+        return playerList;
     }
 
 }
