@@ -17,8 +17,7 @@ public final class Revival extends JavaPlugin {
         // Plugin startup logic
         Data.getInstance().setJavaPlugin(this);
         getLogger().info("Starting The Revival Project");
-        Data.getInstance().initYaml("./plugins/storage.yaml");
-        Data.getInstance().load();
+        Data.getInstance().load("./plugins/storage.yaml");
 
         //Data.getInstance().setLoader(new Save(Data.getInstance().getPlayerList()));
 //        Save loader = Data.getInstance().getLoader().getSave();

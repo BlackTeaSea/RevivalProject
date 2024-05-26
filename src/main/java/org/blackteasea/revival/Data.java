@@ -31,8 +31,6 @@ public class Data extends PropertyChangeSupport {
     Yaml yaml = new Yaml();
     File StorageDocument;
 
-    private List<UUID> dead;
-
     private Data() {
         super(new Object());
         playerList = new HashMap<>();
@@ -116,19 +114,11 @@ public class Data extends PropertyChangeSupport {
 //    }
 
     //YAML Storage
-    public void initYaml(String filepath){
-        yaml = new Yaml();
-        this.StorageDocument  = new File(filepath);
-        try{
-            StorageDocument.createNewFile();
-        } catch (Exception e){
-            System.out.println(e);
-        }
-    }
+
     public Writer getWriter(){
         Writer writer;
         try{
-            writer = new FileWriter(StorageDocument.getName());
+            writer = new FileWriter("./plugins/storage.yaml");
         } catch (Exception e){
             System.out.println("No");
             return null;
@@ -148,7 +138,7 @@ public class Data extends PropertyChangeSupport {
     }
 
     public void createEntry(UUID uuid, boolean revived){
-        if(!playerList.containsKey(uuid)){
+        if(playerList.containsKey(uuid)){
             return;
         }
         playerList.put(uuid, revived);
@@ -175,10 +165,26 @@ public class Data extends PropertyChangeSupport {
     }
 
     public void save(){
-        yaml.dump(playerList, getWriter());
+        HashMap<String, Boolean> copy = new HashMap<>();
+        for(UUID uuid : playerList.keySet()){
+            copy.put(uuid.toString(), readEntry(uuid));
+        }
+
+        yaml.dump(copy, getWriter());
     }
-    public void load(){
-        playerList = yaml.load(getIO());
+    public void load(String filepath){
+        yaml = new Yaml();
+        this.StorageDocument  = new File(filepath);
+        try{
+            if(!StorageDocument.createNewFile() && yaml != null){
+                HashMap<String, Boolean> copy = yaml.load(getIO());
+                for(String uuid : copy.keySet()){
+                    playerList.put(UUID.fromString(uuid), copy.get(uuid));
+                }
+            }
+        } catch (Exception e){
+            System.out.println(e);
+        }
     }
     public HashMap<UUID, Boolean> readAllEntries(){
         return playerList;

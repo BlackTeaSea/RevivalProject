@@ -38,6 +38,7 @@ public class GUI {
         inv.clear();
         for (UUID uuid : playerList.keySet()) {
             if(!Data.getInstance().checkRevived(uuid)) {
+                Data.getInstance().getJavaPlugin().getServer().getLogger().info("Loading player uuid: " + uuid.toString());
                 inv.addItem(createSkullItem(uuid));
             }
         }
@@ -54,19 +55,19 @@ public class GUI {
 
         //...But I like this better --- Chris
 
-        List<Component> infolore = new ArrayList<Component>();
-
-        final Component playername = Component.text(Objects.requireNonNull(server.getOfflinePlayer(uuid).getName()))
-                .color(TextColor.color(0xFFFFFF))
-                .decoration(TextDecoration.BOLD, true);
-
-
-        infolore.add(playername);
-
-        //Adds statistics
-        infolore.addAll(Cost.StatComponent(uuid));
-
-        skull.lore(infolore);
+//        List<Component> infolore = new ArrayList<Component>();
+//
+//        final Component playername = Component.text(Objects.requireNonNull(server.getOfflinePlayer(uuid).getName()))
+//                .color(TextColor.color(0xFFFFFF))
+//                .decoration(TextDecoration.BOLD, true);
+//
+//
+//        infolore.add(playername);
+//
+//        //Adds statistics
+//        infolore.addAll(Cost.StatComponent(uuid));
+//
+//        skull.lore(infolore);
         return skull;
     }
 }
