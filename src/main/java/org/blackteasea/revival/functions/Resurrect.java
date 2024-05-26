@@ -15,7 +15,7 @@ import org.bukkit.entity.Player;
 import java.util.List;
 import java.util.UUID;
 
-public class TestRes {
+public class Resurrect {
     List<UUID> store;
     private final static Server server = Data.getInstance().getJavaPlugin().getServer();
     private final static ForwardingAudience audience = Bukkit.getServer();

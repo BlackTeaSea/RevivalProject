@@ -4,6 +4,7 @@ import net.kyori.adventure.audience.ForwardingAudience;
 import net.kyori.adventure.key.Key;
 import net.kyori.adventure.sound.Sound;
 import net.kyori.adventure.text.Component;
+import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.blackteasea.revival.Data;
 import org.blackteasea.revival.Events.ItemEntersWaterEvent;
@@ -64,6 +65,8 @@ public class ResurrectListener implements Listener {
         Server server = Data.getInstance().getJavaPlugin().getServer();
         HumanEntity user = e.getWhoClicked();
         Inventory inv = Data.getInstance().getGUIInventory();
+        ForwardingAudience audience = Bukkit.getServer();
+        net.kyori.adventure.sound.Sound softRevive = net.kyori.adventure.sound.Sound.sound(Key.key("block.amethyst_cluster.break"), Sound.Source.NEUTRAL, 0.65f, 0.83f);
 
         if (!e.getInventory().equals(inv)) return;
 
@@ -82,9 +85,14 @@ public class ResurrectListener implements Listener {
 
         //New Function
         if(Data.getInstance().checkEntry(target) && server.getOfflinePlayer(target).isOnline()){
-            TestRes.resurrect(target, loc);
+            Resurrect.resurrect(target, loc);
         }else{
             Data.getInstance().updateEntry(target, new Storage(loc, true));
+            audience.playSound(softRevive);
+            final Component respawn = Component.text(server.getOfflinePlayer(target).getName())
+                    .color(TextColor.color(0x5D3FD3))
+                    .append(Component.text(" will be revived on next join!", TextColor.color(0xFFFFFF)));
+            server.broadcast(respawn);
         }
         //Close inventory for the person who clicked
         Data.getInstance().getGUI().closeInventory(e.getWhoClicked());

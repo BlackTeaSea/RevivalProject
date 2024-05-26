@@ -1,22 +1,12 @@
 package org.blackteasea.revival.Listeners;
 
-import jdk.incubator.vector.VectorOperators;
-import net.kyori.adventure.audience.ForwardingAudience;
-import net.kyori.adventure.key.Key;
-import net.kyori.adventure.sound.Sound;
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
-import org.blackteasea.revival.functions.Cost;
 import org.blackteasea.revival.Data;
-import org.blackteasea.revival.functions.TestRes;
+import org.blackteasea.revival.functions.Resurrect;
 import org.bukkit.*;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.player.PlayerJoinEvent;
 
-import java.util.HashMap;
-import java.util.Objects;
 import java.util.UUID;
 
 public class ReconnectListener implements Listener {
@@ -29,8 +19,6 @@ public class ReconnectListener implements Listener {
         if(!Data.getInstance().readEntry(e).isRevived()){
             return;
         }
-
-
         //Resurrect
         //Setup
         Location loc = Data.getInstance().readEntry(e).getLoc();
@@ -39,7 +27,7 @@ public class ReconnectListener implements Listener {
             loc = server.getOfflinePlayer(e).getRespawnLocation();
         }
         assert server.getPlayer(e) != null;
-        TestRes.resurrect(e, loc);
+        Resurrect.resurrect(e, loc);
 
     }
 }
