@@ -17,11 +17,11 @@ public class Death implements Listener {
         UUID player = event.getPlayer().getUniqueId();
         Server server = Data.getInstance().getJavaPlugin().getServer();
 //        player.setGameMode(GameMode.SPECTATOR);
-        data.getJavaPlugin().getLogger().info(server.getPlayer(player).getName()+ " has died and will come back!");
+        data.getJavaPlugin().getLogger().info(server.getPlayer(player).getName() + " has died and will come back!");
 //        if (data.getPlayerList().get(player) == null) {
 //            data.addPlayer(player);
 //        }
-        data.getPlayerList().replace(player, false);
+        data.getPlayerList().put(player, false);
     }
 
 
