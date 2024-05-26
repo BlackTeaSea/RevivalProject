@@ -5,6 +5,7 @@ import org.blackteasea.revival.Items.Recipe;
 import org.blackteasea.revival.Listeners.DeathListener;
 import org.blackteasea.revival.Listeners.ResurrectListener;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import static org.bukkit.GameRule.DO_IMMEDIATE_RESPAWN;
 import static org.bukkit.GameRule.SEND_COMMAND_FEEDBACK;
@@ -33,7 +34,15 @@ public final class Revival extends JavaPlugin {
         getLogger().info("Command feedback is now off");
         getServer().addRecipe(Recipe.totemRecipe());
 
-        //Yaml Storage
+        BukkitRunnable debugRunnable = new BukkitRunnable() {
+            @Override
+            public void run() {
+                getServer().getLogger().info("All current entries: ");
+                Data.getInstance().testPrintEntries();
+
+            }
+        };
+        debugRunnable.runTaskTimer(this, 1L, 20L);
     }
 
     @Override

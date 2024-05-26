@@ -183,5 +183,10 @@ public class Data extends PropertyChangeSupport {
     public HashMap<UUID, Boolean> readAllEntries(){
         return playerList;
     }
+    public void testPrintEntries(){
+        for(UUID uuid : playerList.keySet()){
+            getJavaPlugin().getServer().getLogger().info(uuid.toString());
+        }
+    }
 
 }

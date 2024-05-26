@@ -37,7 +37,7 @@ public class GUI {
 
         inv.clear();
         for (UUID uuid : playerList.keySet()) {
-            if(!playerList.get(uuid)) {
+            if(!Data.getInstance().checkRevived(uuid)) {
                 inv.addItem(createSkullItem(uuid));
             }
         }
@@ -48,7 +48,7 @@ public class GUI {
         Server server = Data.getInstance().getJavaPlugin().getServer();
 
         final ItemStack skull = new ItemStack(Material.PLAYER_HEAD, 1);
-        final SkullMeta meta = (SkullMeta) skull.getItemMeta();
+        final SkullMeta meta = (SkullMeta)skull.getItemMeta();
         meta.setOwningPlayer(server.getOfflinePlayer(uuid));
         skull.setItemMeta(meta);
 

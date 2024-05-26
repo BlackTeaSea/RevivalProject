@@ -15,5 +15,8 @@ public class DeathListener implements Listener {
         UUID player = event.getPlayer().getUniqueId();
 
         Data.getInstance().createEntry(player, false);
+
+        //Debug
+
     }
 }
