@@ -90,8 +90,8 @@ public class ResurrectListener implements Listener {
             Data.getInstance().updateEntry(target, new Storage(loc, true));
             audience.playSound(softRevive);
             final Component respawn = Component.text(server.getOfflinePlayer(target).getName())
-                    .color(TextColor.color(0x5D3FD3))
-                    .append(Component.text(" will be revived on next join!", TextColor.color(0xFFFFFF)));
+                    .color(TextColor.color( 0x7b6db3 ))
+                    .append(Component.text(" will be revived on next join!", TextColor.color(0x818589)));
             server.broadcast(respawn);
         }
         //Close inventory for the person who clicked
