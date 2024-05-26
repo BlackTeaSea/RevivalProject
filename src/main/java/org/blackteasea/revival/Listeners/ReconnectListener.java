@@ -24,43 +24,19 @@ public class ReconnectListener implements Listener {
     public void uponJoin(PlayerJoinEvent event){
         Server server = Data.getInstance().getJavaPlugin().getServer();
         UUID e = event.getPlayer().getUniqueId();
-//        HashMap<UUID, Boolean> playerList = Data.getInstance().getPlayerList();
-
-//        if(!playerList.containsKey(e)){
-//            Data.getInstance().addPlayer(e);
-//            return;
-//        }
-//        if(playerList.get(e)){
-//            return;
-//        }
-        System.out.println("before checker");
 
         //New logic
-        if(!Data.getInstance().readEntry(e)){
-            System.out.println("Reconnecting");
+        if(!Data.getInstance().readEntry(e).isRevived()){
             return;
         }
 
 
         //Resurrect
         //Setup
-        Location loc = Data.getInstance().getDropLocation();
-        System.out.println(loc);
+        Location loc = Data.getInstance().readEntry(e).getLoc();
         if (loc == null) {
-            Player player = server.getPlayer(e);
-            World world = server.getWorld(e);
-            Location spawnLocation = (world != null) ? world.getSpawnLocation() : null;
-
-            System.out.println("Player: " + player);
-            System.out.println("World: " + world);
-            System.out.println("Spawn Location: " + spawnLocation);
-
-            if (player != null && world != null) {
-                player.teleport(spawnLocation);
-            } else {
-                System.out.println("Error: One of the required objects is null.");
-            }
-            return;
+            //Defaults to set spawn
+            loc = server.getOfflinePlayer(e).getRespawnLocation();
         }
         assert server.getPlayer(e) != null;
         TestRes.resurrect(e, loc);

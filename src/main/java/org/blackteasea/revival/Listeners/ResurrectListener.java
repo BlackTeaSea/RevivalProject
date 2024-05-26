@@ -7,6 +7,7 @@ import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.serializer.plain.PlainTextComponentSerializer;
 import org.blackteasea.revival.Data;
 import org.blackteasea.revival.Events.ItemEntersWaterEvent;
+import org.blackteasea.revival.Storage;
 import org.bukkit.*;
 import org.bukkit.entity.HumanEntity;
 import org.bukkit.entity.Item;
@@ -72,20 +73,18 @@ public class ResurrectListener implements Listener {
         final ItemStack clickedItem = e.getCurrentItem();
         assert clickedItem != null;
         SkullMeta clickedSkullMeta = (SkullMeta)clickedItem.getItemMeta();
-        UUID clickedPlayer = Objects.requireNonNull(clickedSkullMeta.getOwningPlayer()).getUniqueId();
+        UUID target = Objects.requireNonNull(clickedSkullMeta.getOwningPlayer()).getUniqueId();
         if (clickedItem.getType().isAir()) return;
 
         //Sets location
         Location loc = Data.getInstance().getDropLocation();
         if (loc == null) return;
 
-        UUID target = clickedPlayer;
-
         //New Function
         if(Data.getInstance().checkEntry(target) && server.getOfflinePlayer(target).isOnline()){
             TestRes.resurrect(target, loc);
         }else{
-            Data.getInstance().updateEntry(target, true);
+            Data.getInstance().updateEntry(target, new Storage(loc, true));
         }
         //Close inventory for the person who clicked
         Data.getInstance().getGUI().closeInventory(e.getWhoClicked());

@@ -20,7 +20,7 @@ import static org.bukkit.Bukkit.createInventory;
 public class Data extends PropertyChangeSupport {
     private static Data instance;
     private JavaPlugin plugin;
-    private HashMap<UUID, Boolean> playerList;
+    private HashMap<UUID, Storage> playerList;
     private Inventory inv;
     private Inventory costinv;
     private GUI gui;
@@ -128,19 +128,17 @@ public class Data extends PropertyChangeSupport {
         return io;
     }
 
-    public void createEntry(UUID uuid, boolean revived){
+    public void createEntry(UUID uuid, Location loc, boolean revived){
         if(playerList.containsKey(uuid)){
             return;
         }
-        playerList.put(uuid, revived);
+        playerList.put(uuid, new Storage(loc, revived));
     }
-    public boolean readEntry(UUID uuid){
-        return playerList.getOrDefault(uuid, false);
+    public Storage readEntry(UUID uuid){
+        return playerList.getOrDefault(uuid, new Storage(null, false));
     }
-
-
-    public void updateEntry(UUID uuid, boolean revived){
-        playerList.replace(uuid, revived);
+    public void updateEntry(UUID uuid, Storage store){
+        playerList.replace(uuid, store);
     }
     public void deleteEntry(UUID uuid){
         playerList.remove(uuid);
@@ -148,21 +146,11 @@ public class Data extends PropertyChangeSupport {
     public boolean checkEntry(UUID uuid){
         return playerList.containsKey(uuid);
     }
-    public boolean checkRevived(UUID uuid){
-        if(!playerList.containsKey(uuid)){
-            return false;
-        }
-        return readEntry(uuid);
-    }
 
     public void save() {
-        Map<String, Boolean> copy = new HashMap<>();
-        for (UUID uuid : playerList.keySet()) {
-            copy.put(uuid.toString(), playerList.get(uuid));
-        }
         Yaml yaml = new Yaml();
         try (Writer writer = new FileWriter("./plugins/storage.yaml")) {
-            yaml.dump(copy, writer);
+            yaml.dump(playerList, writer);
         } catch (IOException e) {
             plugin.getLogger().severe("Failed to save data: " + e.getMessage());
         }
@@ -175,21 +163,18 @@ public class Data extends PropertyChangeSupport {
                 plugin.getLogger().warning("Could not create new storage file.");
             } else {
                 try (InputStream io = Files.newInputStream(storageDocument.toPath())) {
-                    Map<String, Boolean> copy = yaml.load(io);
-                    if (copy != null) {
-                        for (Map.Entry<String, Boolean> entry : copy.entrySet()) {
-                            playerList.put(UUID.fromString(entry.getKey()), entry.getValue());
-                        }
-                    }
+                    Map<UUID, Boolean> playerList = yaml.load(io);
                 }
             }
         } catch (IOException e) {
             plugin.getLogger().severe("Failed to load data: " + e.getMessage());
         }
     }
-    public HashMap<UUID, Boolean> readAllEntries(){
+
+    public HashMap<UUID, Storage> readAllEntries(){
         return playerList;
     }
+
     public void testPrintEntries(){
         for(UUID uuid : playerList.keySet()){
             getJavaPlugin().getServer().getLogger().info(uuid.toString());

@@ -3,6 +3,7 @@ package org.blackteasea.revival.GUI;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
+import org.blackteasea.revival.Storage;
 import org.blackteasea.revival.functions.Cost;
 import org.blackteasea.revival.Data;
 import org.bukkit.Material;
@@ -33,11 +34,11 @@ public class GUI {
 
     public void initializeItems() {
         // Add the items to the inventory
-        HashMap<UUID, Boolean> playerList = Data.getInstance().readAllEntries();
+        HashMap<UUID, Storage> playerList = Data.getInstance().readAllEntries();
 
         inv.clear();
         for (UUID uuid : playerList.keySet()) {
-            if(!Data.getInstance().checkRevived(uuid)) {
+            if(!Data.getInstance().readEntry(uuid).isRevived()) {
                 Data.getInstance().getJavaPlugin().getServer().getLogger().info("Loading player uuid: " + uuid.toString());
                 inv.addItem(createSkullItem(uuid));
             }
