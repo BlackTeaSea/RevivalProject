@@ -21,7 +21,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
-
 public class Resurrect implements Listener {
 
     private Map<Item, BukkitRunnable> itemTasks = new HashMap<>();
