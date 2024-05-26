@@ -1,12 +1,11 @@
 package org.blackteasea.revival;
 
-import org.bukkit.OfflinePlayer;
 import org.bukkit.Server;
-import org.bukkit.entity.Player;
 import org.bukkit.event.EventHandler;
 import org.bukkit.event.Listener;
 import org.bukkit.event.entity.PlayerDeathEvent;
 
+import java.util.Objects;
 import java.util.UUID;
 
 public class Death implements Listener {

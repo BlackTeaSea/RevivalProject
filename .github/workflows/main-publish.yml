@@ -30,7 +30,7 @@ jobs:
         run: mkdir staging && cp target/*.jar staging
       
       - name: Set Executable Permissions
-        run: chmod +x target/Revival-1.01-SNAPSHOT.jar
+        run: chmod +x target/Revival-1.0.1-SNAPSHOT.jar
     
       - name: Upload Jar to Releases
         uses: actions/upload-release-asset@v1

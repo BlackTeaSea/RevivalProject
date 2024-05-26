@@ -21,7 +21,6 @@ import org.bukkit.scheduler.BukkitRunnable;
 
 import java.util.*;
 
-
 public class Resurrect implements Listener {
 
     private Map<Item, BukkitRunnable> itemTasks = new HashMap<>();
@@ -71,22 +70,20 @@ public class Resurrect implements Listener {
         e.setCancelled(true);
 
         final ItemStack clickedItem = e.getCurrentItem();
+        assert clickedItem != null;
         SkullMeta clickedSkullMeta = (SkullMeta)clickedItem.getItemMeta();
-        UUID clickedPlayer = clickedSkullMeta.getOwningPlayer().getUniqueId();
+        UUID clickedPlayer = Objects.requireNonNull(clickedSkullMeta.getOwningPlayer()).getUniqueId();
 
-        if (clickedItem == null || clickedItem.getType().isAir()) return;
+        if (clickedItem.getType().isAir()) return;
 
         // Checks if they got the stuff
-
 
 
         HashMap<UUID, Boolean> playerListCopy = Data.getInstance().getPlayerList();
 
         for (UUID uuid: playerListCopy.keySet()) {
-
-
             if (uuid.equals(clickedPlayer) && !playerListCopy.get(uuid)) {
-                if (server.getPlayer(uuid).isOnline()){
+                if (Objects.requireNonNull(server.getPlayer(uuid)).isOnline() && Objects.requireNonNull(server.getPlayer(uuid)).isConnected()){
                     //if (!Cost.chargeEXP((Player)user, resurrected)){return;}
                     Player resurrected = server.getPlayer(uuid);
 
@@ -94,11 +91,12 @@ public class Resurrect implements Listener {
                     if (loc == null) return;
 
                     int newplaytime = (Cost.getPlayTime(uuid) - Cost.getDeathTime(uuid))/(60);
+                    assert resurrected != null;
                     resurrected.teleport(loc);
                     resurrected.setStatistic(Statistic.PLAY_ONE_MINUTE, newplaytime);
                     resurrected.setStatistic(Statistic.TIME_SINCE_DEATH, 0);
                     resurrected.setGameMode(org.bukkit.GameMode.SURVIVAL);
-                    Data.getInstance().getPlayerList().replace(uuid, true);
+                    Data.getInstance().getPlayerList().replace(uuid, Boolean.TRUE);
 
                     inv.remove(clickedItem);
                     Data.getInstance().setDropLocation(null);
@@ -121,7 +119,7 @@ public class Resurrect implements Listener {
                         Data.getInstance().getDropEvent().getItemDrop().remove();
                     }
                     Data.getInstance().setDropEvent(null);
-                    Data.getInstance().getPlayerList().replace(uuid, true);
+                    Data.getInstance().getPlayerList().replace(uuid, Boolean.TRUE);
 
                 }
                 else {
