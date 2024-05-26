@@ -82,7 +82,7 @@ public class ResurrectListener implements Listener {
         UUID target = clickedPlayer;
 
         //New Function
-        if(Data.getInstance().checkEntry(target) && server.getPlayer(target).isOnline()){
+        if(Data.getInstance().checkEntry(target) && server.getOfflinePlayer(target).isOnline()){
             TestRes.resurrect(target, loc);
         }else{
             Data.getInstance().updateEntry(target, true);

@@ -135,7 +135,7 @@ public class Data extends PropertyChangeSupport {
         playerList.put(uuid, revived);
     }
     public boolean readEntry(UUID uuid){
-        return playerList.get(uuid);
+        return playerList.getOrDefault(uuid, false);
     }
 
 

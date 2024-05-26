@@ -3,6 +3,7 @@ package org.blackteasea.revival;
 //import org.blackteasea.revival.Experimental.Save;
 import org.blackteasea.revival.Items.Recipe;
 import org.blackteasea.revival.Listeners.DeathListener;
+import org.blackteasea.revival.Listeners.ReconnectListener;
 import org.blackteasea.revival.Listeners.ResurrectListener;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
@@ -27,6 +28,7 @@ public final class Revival extends JavaPlugin {
 
         getServer().getPluginManager().registerEvents(new DeathListener(), this);
         getServer().getPluginManager().registerEvents(new ResurrectListener(), this);
+        getServer().getPluginManager().registerEvents(new ReconnectListener(), this);
 
         getServer().getWorlds().forEach(world -> world.setGameRule(SEND_COMMAND_FEEDBACK, false));
         getServer().getWorlds().forEach(world -> world.setGameRule(DO_IMMEDIATE_RESPAWN, true));
@@ -36,8 +38,8 @@ public final class Revival extends JavaPlugin {
         BukkitRunnable debugRunnable = new BukkitRunnable() {
             @Override
             public void run() {
-                getServer().getLogger().info("All current entries: ");
-                Data.getInstance().testPrintEntries();
+//                getServer().getLogger().info("All current entries: ");
+//                Data.getInstance().testPrintEntries();
 
             }
         };
