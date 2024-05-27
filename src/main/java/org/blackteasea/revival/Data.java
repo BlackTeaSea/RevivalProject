@@ -3,6 +3,8 @@ package org.blackteasea.revival;
 import org.blackteasea.revival.GUI.CostGUI;
 import org.blackteasea.revival.GUI.GUI;
 import org.bukkit.Location;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
@@ -29,6 +31,7 @@ public class Data extends PropertyChangeSupport {
     //private Save loader;
 
     File storageDocument;
+    FileConfiguration deathlist;
 
     private Data() {
         super(new Object());
@@ -37,6 +40,7 @@ public class Data extends PropertyChangeSupport {
         this.gui = null;
         dropLocation = null;
         //loader = null;
+        this.deathlist = new YamlConfiguration();
     }
     public static Data getInstance() {
         if (instance == null) {
@@ -51,18 +55,6 @@ public class Data extends PropertyChangeSupport {
         this.plugin = plugin;
     }
 
-//    public void addPlayer(UUID playerUUID) {
-//        this.playerList.put(playerUUID, Boolean.TRUE);
-//    }
-//    public void removePlayer(UUID playerUUID) {
-//        this.playerList.remove(playerUUID);
-//    }
-//    public HashMap<UUID, Boolean> getPlayerList() {
-//        return this.playerList;
-//    }
-//    public void setPlayerList(HashMap<UUID, Boolean> players) {
-//        this.playerList = players;
-//    }
     //Event
     public Inventory getGUIInventory() {
         if (this.inv == null) {
@@ -97,12 +89,6 @@ public class Data extends PropertyChangeSupport {
     public Location getDropLocation() {
         return this.dropLocation;
     }
-//    public Save getLoader(){
-//        return this.loader;
-//    }
-//    public void setLoader(Save loader) {
-//        this.loader = loader;
-//    }
 
     //YAML Storage
 
@@ -149,6 +135,10 @@ public class Data extends PropertyChangeSupport {
 
     public void save() {
         Yaml yaml = new Yaml();
+        Map<String, Boolean> copy = new HashMap<>();
+        for (UUID uuid : playerList.keySet()) {
+            copy.put(uuid.toString(), copy.get(uuid));
+        }
         try (Writer writer = new FileWriter("./plugins/storage.yaml")) {
             yaml.dump(playerList, writer);
         } catch (IOException e) {
@@ -163,7 +153,12 @@ public class Data extends PropertyChangeSupport {
                 plugin.getLogger().warning("Could not create new storage file.");
             } else {
                 try (InputStream io = Files.newInputStream(storageDocument.toPath())) {
-                    Map<UUID, Boolean> playerList = yaml.load(io);
+                    Map<String, Storage> copy = yaml.load(io);
+                    if (copy != null) {
+                        for (Map.Entry<String, Storage> entry : copy.entrySet()) {
+                            playerList.put(UUID.fromString(entry.getKey()), entry.getValue());
+                        }
+                    }
                 }
             }
         } catch (IOException e) {
@@ -180,5 +175,6 @@ public class Data extends PropertyChangeSupport {
             getJavaPlugin().getServer().getLogger().info(uuid.toString());
         }
     }
+
 
 }

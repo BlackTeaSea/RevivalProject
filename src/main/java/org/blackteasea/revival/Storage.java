@@ -1,7 +1,12 @@
 package org.blackteasea.revival;
 
 import org.bukkit.Location;
+import org.bukkit.configuration.serialization.SerializableAs;
 
+import java.util.HashMap;
+import java.util.Map;
+
+@SerializableAs("Storage")
 public class Storage {
     private Location loc;
     private boolean revived;
@@ -24,4 +29,17 @@ public class Storage {
     public void setRevived(boolean revived) {
         this.revived = revived;
     }
+
+    public Map<String, Object> serialize(){
+        Map<String, Object> map = new HashMap<>();
+        map.put("location", loc);
+        map.put("revived", revived);
+        return map;
+    }
+
+    public static Storage deserialize(Map<String, Object> map){
+        return new Storage((Location)map.get("location"), (boolean)map.get("revived"));
+    }
+
+
 }

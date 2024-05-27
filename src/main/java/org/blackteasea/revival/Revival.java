@@ -20,11 +20,7 @@ public final class Revival extends JavaPlugin {
         getLogger().info("Starting The Revival Project");
         Data.getInstance().load("./plugins/storage.yaml");
 
-        //Data.getInstance().setLoader(new Save(Data.getInstance().getPlayerList()));
-//        Save loader = Data.getInstance().getLoader().getSave();
-//        if (loader != null){
-//            System.out.println(loader.playerList.toString());
-//        }
+
 
         getServer().getPluginManager().registerEvents(new DeathListener(), this);
         getServer().getPluginManager().registerEvents(new ResurrectListener(), this);
