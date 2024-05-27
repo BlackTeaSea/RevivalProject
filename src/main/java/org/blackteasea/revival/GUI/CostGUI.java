@@ -1,8 +1,8 @@
-package org.blackteasea.revival;
+package org.blackteasea.revival.GUI;
 
+import org.blackteasea.revival.Data;
 import org.bukkit.Material;
 import org.bukkit.entity.HumanEntity;
-import org.bukkit.entity.Player;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.inventory.ItemStack;
 
@@ -20,6 +20,5 @@ public class CostGUI {
         inv.clear();
         inv.setItem(46, new ItemStack(Material.RED_STAINED_GLASS, 1));
         inv.setItem(54, new ItemStack(Material.LIME_STAINED_GLASS, 1));
-
     }
 }

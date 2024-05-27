@@ -1,10 +1,10 @@
-package org.blackteasea.revival;
+package org.blackteasea.revival.Items;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
-import net.kyori.adventure.text.format.NamedTextColor;
+import org.blackteasea.revival.Data;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
@@ -14,8 +14,6 @@ import org.bukkit.inventory.meta.ItemMeta;
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import net.kyori.adventure.text.format.TextDecoration;
-import net.md_5.bungee.api.ChatColor;
-import net.md_5.bungee.api.chat.hover.content.Item;
 
 //this class makes recipe for totem of revival
 public class Recipe {
@@ -28,7 +26,7 @@ public class Recipe {
 
         totemMeta.displayName(totemName);
 
-        List<Component> infolore = new ArrayList<Component>();
+        List<Component> infolore = new ArrayList<>();
 
         final Component revivalName = Component.text("Drop in a villager well")
                 .color(TextColor.color(0x2708A0))

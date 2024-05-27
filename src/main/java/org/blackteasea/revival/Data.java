@@ -1,40 +1,45 @@
 package org.blackteasea.revival;
 
-import org.bukkit.Bukkit;
+import org.blackteasea.revival.GUI.CostGUI;
+import org.blackteasea.revival.GUI.GUI;
 import org.bukkit.Location;
-import org.bukkit.OfflinePlayer;
-import org.bukkit.entity.Player;
+import org.bukkit.configuration.file.FileConfiguration;
+import org.bukkit.configuration.file.YamlConfiguration;
 import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.yaml.snakeyaml.Yaml;
+
+
 import java.beans.PropertyChangeSupport;
-import java.util.ArrayList;
-import java.util.HashMap;
-import java.util.List;
-import java.util.UUID;
+import java.io.*;
+import java.nio.file.Files;
+import java.nio.file.Paths;
+import java.util.*;
 
 import static org.bukkit.Bukkit.createInventory;
 
 public class Data extends PropertyChangeSupport {
     private static Data instance;
     private JavaPlugin plugin;
-    private PlayerDropItemEvent dropEvent;
-    private HashMap<UUID, Boolean> playerList;
+    private HashMap<UUID, Storage> playerList;
     private Inventory inv;
     private Inventory costinv;
     private GUI gui;
     private CostGUI costgui;
     private Location dropLocation;
-    private Save loader;
+    //private Save loader;
+
+    private File storageDocument;
+    private FileConfiguration deathListYaml;
 
     private Data() {
         super(new Object());
         playerList = new HashMap<>();
 
-        dropEvent = null;
         this.gui = null;
         dropLocation = null;
-        loader = null;
+        //loader = null;
     }
     public static Data getInstance() {
         if (instance == null) {
@@ -48,24 +53,8 @@ public class Data extends PropertyChangeSupport {
     public void setJavaPlugin(JavaPlugin plugin) {
         this.plugin = plugin;
     }
-    public void addPlayer(UUID playerUUID) {
-        this.playerList.put(playerUUID, true);
-    }
-    public void removePlayer(UUID playerUUID) {
-        this.playerList.remove(playerUUID);
-    }
-    public HashMap<UUID, Boolean> getPlayerList() {
-        return this.playerList;
-    }
-    public void setPlayerList(HashMap<UUID, Boolean> players) {
-        this.playerList = players;
-    }
-    public PlayerDropItemEvent getDropEvent() {
-        return this.dropEvent;
-    }
-    public void setDropEvent(PlayerDropItemEvent event) {
-        this.dropEvent = event;
-    }
+
+    //Event
     public Inventory getGUIInventory() {
         if (this.inv == null) {
             this.inv = createInventory(null, 9, "Resurrect");
@@ -99,11 +88,58 @@ public class Data extends PropertyChangeSupport {
     public Location getDropLocation() {
         return this.dropLocation;
     }
-    public Save getLoader(){
-        return this.loader;
+
+
+    public void createEntry(UUID uuid, Location loc, boolean revived){
+        if(playerList.containsKey(uuid)){
+            return;
+        }
+        playerList.put(uuid, new Storage(loc, revived));
     }
-    public void setLoader(Save loader) {
-        this.loader = loader;
+    public Storage readEntry(UUID uuid){
+        return playerList.getOrDefault(uuid, new Storage(null, false));
     }
+    public void updateEntry(UUID uuid, Storage store){
+        playerList.replace(uuid, store);
+    }
+    public void deleteEntry(UUID uuid){
+        playerList.remove(uuid);
+    }
+    public boolean checkEntry(UUID uuid){
+        return playerList.containsKey(uuid);
+    }
+
+
+    public HashMap<UUID, Storage> readAllEntries(){
+        return playerList;
+    }
+
+    public void load(){
+        deathListYaml = new YamlConfiguration();
+        try{
+            deathListYaml.load(new File("./plugins/deathlist.yml"));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+        for (String uuid : deathListYaml.getKeys(false)){
+            getJavaPlugin().getServer().getLogger().info("HERE IS SOME LOUD THING FOR STUFF!!! UUID of current read: " + uuid);
+            playerList.put(UUID.fromString(uuid), (Storage) deathListYaml.get(uuid));
+        }
+    }
+    public void save(){
+        deathListYaml = new YamlConfiguration();
+
+        for(UUID uuid : playerList.keySet()){
+            deathListYaml.set(uuid.toString(), playerList.get(uuid));
+        }
+        try{
+            deathListYaml.save(new File("./plugins/deathlist.yml"));
+        } catch (Exception e){
+            e.printStackTrace();
+        }
+
+    }
+
 
 }
