@@ -1,7 +1,13 @@
 package org.blackteasea.revival;
 
-import org.apache.commons.lang3.ObjectUtils;
+//import org.blackteasea.revival.Experimental.Save;
+import org.blackteasea.revival.Items.Recipe;
+import org.blackteasea.revival.Listeners.DeathListener;
+import org.blackteasea.revival.Listeners.ReconnectListener;
+import org.blackteasea.revival.Listeners.ResurrectListener;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
+import org.bukkit.scheduler.BukkitRunnable;
 
 import static org.bukkit.GameRule.DO_IMMEDIATE_RESPAWN;
 import static org.bukkit.GameRule.SEND_COMMAND_FEEDBACK;
@@ -11,26 +17,42 @@ public final class Revival extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
+        ConfigurationSerialization.registerClass(Storage.class, "Storage");
         Data.getInstance().setJavaPlugin(this);
         getLogger().info("Starting The Revival Project");
-        Data.getInstance().setLoader(new Save(Data.getInstance().getPlayerList()));
-        Save loader = Data.getInstance().getLoader().getSave();
-        if (loader != null){
-            System.out.println(loader.playerList.toString());
-        }
-        getServer().getPluginManager().registerEvents(new Death(), this);
-        getServer().getPluginManager().registerEvents(new Resurrect(), this);
+        Data.getInstance().deathListLoad();
+
+
+
+        getServer().getPluginManager().registerEvents(new DeathListener(), this);
+        getServer().getPluginManager().registerEvents(new ResurrectListener(), this);
+        getServer().getPluginManager().registerEvents(new ReconnectListener(), this);
+
         getServer().getWorlds().forEach(world -> world.setGameRule(SEND_COMMAND_FEEDBACK, false));
         getServer().getWorlds().forEach(world -> world.setGameRule(DO_IMMEDIATE_RESPAWN, true));
         getLogger().info("Command feedback is now off");
         getServer().addRecipe(Recipe.totemRecipe());
+
+        BukkitRunnable debugRunnable = new BukkitRunnable() {
+            @Override
+            public void run() {
+                getServer().getLogger().info("All current entries: ");
+                Data.getInstance().testPrintEntries();
+
+            }
+        };
+        debugRunnable.runTaskTimer(this, 1L, 20L);
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
         getServer().getWorlds().forEach(world -> world.setGameRule(SEND_COMMAND_FEEDBACK, true));
-        Save loader = Data.getInstance().getLoader();
-        loader.setSave();
+        //Save loader = Data.getInstance().getLoader();
+        //loader.setSave();
+
+        //Yaml Storage
+        Data.getInstance().deathListSave();
+
     }
 }

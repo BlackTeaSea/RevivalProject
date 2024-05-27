@@ -1,10 +1,4 @@
-package org.blackteasea.revival;
-
-import org.bukkit.Location;
-import org.bukkit.World;
-import org.bukkit.block.Block;
-
-import java.util.Random;
+package org.blackteasea.revival.Experimental;
 
 public class Logic {
 //    public static Location newSpawnLocation(Location location) {

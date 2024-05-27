@@ -1,9 +1,10 @@
-package org.blackteasea.revival;
+package org.blackteasea.revival.Items;
 
 
 import java.util.ArrayList;
 import java.util.List;
 
+import org.blackteasea.revival.Data;
 import org.bukkit.Material;
 import org.bukkit.NamespacedKey;
 import org.bukkit.inventory.ItemStack;
