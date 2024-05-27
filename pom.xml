@@ -6,7 +6,7 @@
 
   <groupId>org.BlackTeaSea</groupId>
   <artifactId>Revival</artifactId>
-  <version>1.0.1-SNAPSHOT</version>
+  <version>1.0.0</version>
   <packaging>jar</packaging>
 
   <name>Revival</name>
