@@ -89,29 +89,6 @@ public class Data extends PropertyChangeSupport {
         return this.dropLocation;
     }
 
-    //YAML Storage
-
-//    public Writer getWriter(){
-//        Writer writer;
-//        try{
-//            writer = new FileWriter("./plugins/storage.yaml");
-//        } catch (Exception e){
-//            System.out.println("No");
-//            return null;
-//        }
-//        return writer;
-//
-//    }
-//    public InputStream getIO(){
-//        InputStream io;
-//        try{
-//            io = Files.newInputStream(Paths.get(storageDocument.getName()));
-//        } catch (Exception e){
-//            System.out.println("?No.");
-//            return null;
-//        }
-//        return io;
-//    }
 
     public void createEntry(UUID uuid, Location loc, boolean revived){
         if(playerList.containsKey(uuid)){
@@ -132,50 +109,12 @@ public class Data extends PropertyChangeSupport {
         return playerList.containsKey(uuid);
     }
 
-//    public void save() {
-//        Yaml yaml = new Yaml();
-//        Map<String, Boolean> copy = new HashMap<>();
-//        for (UUID uuid : playerList.keySet()) {
-//            copy.put(uuid.toString(), copy.get(uuid));
-//        }
-//        try (Writer writer = new FileWriter("./plugins/storage.yaml")) {
-//            yaml.dump(playerList, writer);
-//        } catch (IOException e) {
-//            plugin.getLogger().severe("Failed to save data: " + e.getMessage());
-//        }
-//    }
-//    public void load(String filepath) {
-//        Yaml yaml = new Yaml();
-//        this.storageDocument = new File(filepath);
-//        try {
-//            if (!storageDocument.exists() && !storageDocument.createNewFile()) {
-//                plugin.getLogger().warning("Could not create new storage file.");
-//            } else {
-//                try (InputStream io = Files.newInputStream(storageDocument.toPath())) {
-//                    Map<String, Storage> copy = yaml.load(io);
-//                    if (copy != null) {
-//                        for (Map.Entry<String, Storage> entry : copy.entrySet()) {
-//                            playerList.put(UUID.fromString(entry.getKey()), entry.getValue());
-//                        }
-//                    }
-//                }
-//            }
-//        } catch (IOException e) {
-//            plugin.getLogger().severe("Failed to load data: " + e.getMessage());
-//        }
-//    }
 
     public HashMap<UUID, Storage> readAllEntries(){
         return playerList;
     }
 
-    public void testPrintEntries(){
-        for(UUID uuid : playerList.keySet()){
-            getJavaPlugin().getServer().getLogger().info(uuid.toString());
-        }
-    }
-
-    public void deathListLoad(){
+    public void load(){
         deathListYaml = new YamlConfiguration();
         try{
             deathListYaml.load(new File("./plugins/deathlist.yml"));
@@ -188,8 +127,7 @@ public class Data extends PropertyChangeSupport {
             playerList.put(UUID.fromString(uuid), (Storage) deathListYaml.get(uuid));
         }
     }
-
-    public void deathListSave(){
+    public void save(){
         deathListYaml = new YamlConfiguration();
 
         for(UUID uuid : playerList.keySet()){

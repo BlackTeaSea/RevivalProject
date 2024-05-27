@@ -20,7 +20,7 @@ public final class Revival extends JavaPlugin {
         ConfigurationSerialization.registerClass(Storage.class, "Storage");
         Data.getInstance().setJavaPlugin(this);
         getLogger().info("Starting The Revival Project");
-        Data.getInstance().deathListLoad();
+        Data.getInstance().load();
 
 
 
@@ -33,26 +33,14 @@ public final class Revival extends JavaPlugin {
         getLogger().info("Command feedback is now off");
         getServer().addRecipe(Recipe.totemRecipe());
 
-        BukkitRunnable debugRunnable = new BukkitRunnable() {
-            @Override
-            public void run() {
-                getServer().getLogger().info("All current entries: ");
-                Data.getInstance().testPrintEntries();
-
-            }
-        };
-        debugRunnable.runTaskTimer(this, 1L, 20L);
     }
 
     @Override
     public void onDisable() {
         // Plugin shutdown logic
         getServer().getWorlds().forEach(world -> world.setGameRule(SEND_COMMAND_FEEDBACK, true));
-        //Save loader = Data.getInstance().getLoader();
-        //loader.setSave();
 
-        //Yaml Storage
-        Data.getInstance().deathListSave();
+        Data.getInstance().save();
 
     }
 }
