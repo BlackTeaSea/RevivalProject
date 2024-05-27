@@ -42,7 +42,7 @@ public class Recipe {
                 "RXR",
                 "NBN");
         recipe.setIngredient('X', Material.TOTEM_OF_UNDYING);
-        recipe.setIngredient('N', Material.NETHERITE_SCRAP;
+        recipe.setIngredient('N', Material.NETHERITE_SCRAP);
         recipe.setIngredient('R', Material.ROTTEN_FLESH);
         recipe.setIngredient('T', Material.BLAZE_POWDER);
         recipe.setIngredient('B', Material.ENDER_EYE);
