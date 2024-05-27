@@ -1,34 +1,41 @@
-# RevivalProject
+# Revival Project
 
-Minecraft Hardcore Revival Plugin
+## Revival Mechanism
 
-Revive your fallen comrades in the unforgiving world of Minecraft Hardcore with our revolutionary plugin! Harness the power of ancient rituals and craft mystical items to bring your friends back from the brink of oblivion.
+In a standard hardcore Minecraft world, players who die are no longer able to respawn, making survival a true challenge. However, with our plugin, teammates have the chance to bring back fallen comrades by undertaking a special challenge.
+Crafting the Totem of Revival
 
-Features:
+To craft the Totem of Revival, teammates must gather the following items:
 
-* Revival Rituals: Perform intricate rituals to summon your fallen friends back into the world of Minecraft. Gather rare resources and craft to unlock the secrets of revival.
+* 4 Netherite Scraps
+* 2 Rotten Flesh
+* 1 Eye of Ender
+* 1 Totem of Undying
+* 1 Blaze Powder
 
-* Crafting Challenges: Obtain the necessary components for the revival ritual by undertaking daring crafting challenges. From searching for their totem to exploring treacherous dungeons, every step brings you closer to bringing your fallen allies back to life.
+Combine these items in a crafting table to create the Totem of Revival.
+Performing the Revival Ritual
 
-* Friend Resurrection: Witness the awe-inspiring moment as your fallen comrade rises from the depths of the abyss, ready to rejoin your quest for survival. But beware, for the world they return to may not be the one they left behind.
+1. Craft the Totem of Revival: Use the crafting table to combine the gathered items into the Totem of Revival.
+2. Choose a Body of Water: Find a body of water in your Minecraft world.
+3. Activate the Ritual: Throw the Totem of Revival into the water. This will trigger the revival process.
+4. Select the Player to Revive: A prompt will appear, allowing you to choose which fallen teammate you wish to bring back to life.
+5. Witness the Resurrection: The selected player will be resurrected and respawn in the game.
 
-* Teamwork and Strategy: Coordinate with your fellow players to gather the necessary resources, perform the ritual, and ensure the safe return of your fallen friend. Communication and cooperation are key to success in the harsh world of Minecraft Hardcore.
-
-* Risk and Reward: Reviving a fallen comrade comes with its own set of risks and rewards. Will your friend return stronger than before, or will they be haunted by the memories of their demise? Only time will tell.
-
-![Totem of Undying](https://minecraft.wiki/images/Totem_of_Undying_JE2_BE2.png?d56eb)
+By following these steps, you can bring your teammates back into the game, adding an exciting and strategic element to your Minecraft Hardcore experience.
 
 ## Prerequisites
-* [Java] 17
+* Java 17 or higher
+## Installation
+### Downloading the Plugin
+1. Go to the Releases page of the repository.
+2. Download the latest RevivalProject.jar file from the releases.
 
-## Clone
-To clone properly:
-1. `git clone git@github.com:GoldfishJonny/RevivalProject.git`
-2. `cd RevivalProject`
+### Setting Up the Plugin
 
-## Building
-To build, use maven, lol
-
+1. Place the downloaded RevivalProject.jar file into your Minecraft server's plugins directory.
+2. Ensure your server is running Paper for compatibility.
+3. Start or restart your server to load the plugin.
 
 
 

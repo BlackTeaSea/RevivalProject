@@ -1,37 +1,26 @@
 package org.blackteasea.revival.functions;
 
-//Calculates the price of revival based on that dead server.getPlayer(uuid)'s achievements
-
 import net.kyori.adventure.text.Component;
 import net.kyori.adventure.text.format.TextColor;
 import org.blackteasea.revival.Data;
 import org.bukkit.*;
-
 import java.util.ArrayList;
 import java.util.List;
+import java.util.Objects;
 import java.util.UUID;
 
-    
-    
 public class Cost {
-    public static String[]advancementChecks = {
-            "end/kill_dragon",
-            "nether/netherite_armor",
-            "adventure/kill_all_mobs",
-            "adventure/adventuring_time",
-            "adventure/sniper_duel"
-            };
     private static final Server server = Data.getInstance().getJavaPlugin().getServer();
     
 
 
-    public static int getDeathTime(UUID uuid){return server.getPlayer(uuid).getStatistic(Statistic.TIME_SINCE_DEATH)/20;}
-    public static int getDeathCount(UUID uuid) {return server.getPlayer(uuid).getStatistic(Statistic.DEATHS);}
-    public static int getPlayTime(UUID uuid) {return server.getPlayer(uuid).getStatistic(Statistic.PLAY_ONE_MINUTE)/20;};
+    public static int getDeathTime(UUID uuid){return Objects.requireNonNull(server.getPlayer(uuid)).getStatistic(Statistic.TIME_SINCE_DEATH)/20;}
+    public static int getDeathCount(UUID uuid) {return Objects.requireNonNull(server.getPlayer(uuid)).getStatistic(Statistic.DEATHS);}
+    public static int getPlayTime(UUID uuid) {return Objects.requireNonNull(server.getPlayer(uuid)).getStatistic(Statistic.PLAY_ONE_MINUTE)/20;}
 
     public static int getPower(UUID uuid){
         int timeAlive = (getPlayTime(uuid) - getDeathTime(uuid))/(60);
-        int score = server.getPlayer(uuid).getPlayer().getTotalExperience();
+        int score = Objects.requireNonNull(Objects.requireNonNull(server.getPlayer(uuid)).getPlayer()).getTotalExperience();
 
 
         return score + timeAlive;
@@ -80,23 +69,6 @@ public class Cost {
 
         return (int)((power) * (0.15 + 0.02*deaths));
     }
-
-//    public static boolean chargeEXP(UUID buyer, UUID resurrect){
-//        Player buyerPlayer = server.getPlayer(buyer);
-//        OfflinePlayer resurrectPlayer = server.getOfflinePlayer(
-//
-//        float buyerCurrentExp = buyer.getExp();
-//        float Cost = ExpCost(resurrect);
-//
-//
-//        if (buyerCurrentExp < Cost){
-//            return false;
-//        }
-//
-//        buyer.setExp(buyerCurrentExp - Cost);
-//        return true;
-//    }
-
 
 }
 
