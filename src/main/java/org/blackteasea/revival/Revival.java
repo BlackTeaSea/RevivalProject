@@ -5,6 +5,7 @@ import org.blackteasea.revival.Items.Recipe;
 import org.blackteasea.revival.Listeners.DeathListener;
 import org.blackteasea.revival.Listeners.ReconnectListener;
 import org.blackteasea.revival.Listeners.ResurrectListener;
+import org.bukkit.configuration.serialization.ConfigurationSerialization;
 import org.bukkit.plugin.java.JavaPlugin;
 import org.bukkit.scheduler.BukkitRunnable;
 
@@ -16,9 +17,10 @@ public final class Revival extends JavaPlugin {
     @Override
     public void onEnable() {
         // Plugin startup logic
+        ConfigurationSerialization.registerClass(Storage.class, "Storage");
         Data.getInstance().setJavaPlugin(this);
         getLogger().info("Starting The Revival Project");
-        Data.getInstance().load("./plugins/storage.yaml");
+        Data.getInstance().deathListLoad();
 
 
 
@@ -34,8 +36,8 @@ public final class Revival extends JavaPlugin {
         BukkitRunnable debugRunnable = new BukkitRunnable() {
             @Override
             public void run() {
-//                getServer().getLogger().info("All current entries: ");
-//                Data.getInstance().testPrintEntries();
+                getServer().getLogger().info("All current entries: ");
+                Data.getInstance().testPrintEntries();
 
             }
         };
@@ -50,7 +52,7 @@ public final class Revival extends JavaPlugin {
         //loader.setSave();
 
         //Yaml Storage
-        Data.getInstance().save();
+        Data.getInstance().deathListSave();
 
     }
 }

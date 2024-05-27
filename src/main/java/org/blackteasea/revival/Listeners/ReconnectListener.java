@@ -24,7 +24,7 @@ public class ReconnectListener implements Listener {
         Location loc = Data.getInstance().readEntry(e).getLoc();
         if (loc == null) {
             //Defaults to set spawn
-            loc = server.getOfflinePlayer(e).getRespawnLocation();
+            loc = server.getPlayer(e).getLocation();
         }
         assert server.getPlayer(e) != null;
         Resurrect.resurrect(e, loc);

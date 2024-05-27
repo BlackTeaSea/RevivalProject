@@ -1,13 +1,14 @@
 package org.blackteasea.revival;
 
 import org.bukkit.Location;
+import org.bukkit.configuration.serialization.ConfigurationSerializable;
 import org.bukkit.configuration.serialization.SerializableAs;
 
 import java.util.HashMap;
 import java.util.Map;
 
 @SerializableAs("Storage")
-public class Storage {
+public class Storage implements ConfigurationSerializable {
     private Location loc;
     private boolean revived;
 
@@ -30,6 +31,7 @@ public class Storage {
         this.revived = revived;
     }
 
+    @Override
     public Map<String, Object> serialize(){
         Map<String, Object> map = new HashMap<>();
         map.put("location", loc);
