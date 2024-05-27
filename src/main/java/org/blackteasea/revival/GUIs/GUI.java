@@ -1,10 +1,6 @@
-package org.blackteasea.revival.GUI;
+package org.blackteasea.revival.GUIs;
 
-import net.kyori.adventure.text.Component;
-import net.kyori.adventure.text.format.TextColor;
-import net.kyori.adventure.text.format.TextDecoration;
 import org.blackteasea.revival.Storage;
-import org.blackteasea.revival.functions.Cost;
 import org.blackteasea.revival.Data;
 import org.bukkit.Material;
 import org.bukkit.Server;

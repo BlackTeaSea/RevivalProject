@@ -1,20 +1,16 @@
 package org.blackteasea.revival;
 
-import org.blackteasea.revival.GUI.CostGUI;
-import org.blackteasea.revival.GUI.GUI;
+import org.blackteasea.revival.GUIs.CostGUI;
+import org.blackteasea.revival.GUIs.GUI;
 import org.bukkit.Location;
 import org.bukkit.configuration.file.FileConfiguration;
 import org.bukkit.configuration.file.YamlConfiguration;
-import org.bukkit.event.player.PlayerDropItemEvent;
 import org.bukkit.inventory.Inventory;
 import org.bukkit.plugin.java.JavaPlugin;
-import org.yaml.snakeyaml.Yaml;
 
 
 import java.beans.PropertyChangeSupport;
 import java.io.*;
-import java.nio.file.Files;
-import java.nio.file.Paths;
 import java.util.*;
 
 import static org.bukkit.Bukkit.createInventory;

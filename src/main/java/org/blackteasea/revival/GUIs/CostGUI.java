@@ -1,4 +1,4 @@
-package org.blackteasea.revival.GUI;
+package org.blackteasea.revival.GUIs;
 
 import org.blackteasea.revival.Data;
 import org.bukkit.Material;
