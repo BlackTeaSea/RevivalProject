@@ -30,7 +30,7 @@ jobs:
         run: mkdir staging && cp target/*.jar staging
       
       - name: Set Executable Permissions
-        run: chmod +x target/Revival-1.0.1-SNAPSHOT.jar
+        run: chmod +x target/Revival-1.0.0.jar
     
       - name: Upload Jar to Releases
         uses: actions/upload-release-asset@v1
@@ -38,6 +38,6 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN}}
         with:
           upload_url: ${{ github.event.release.upload_url }}
-          asset_path: "target/Revival-1.0.1-SNAPSHOT.jar"
-          asset_name: "Revival-1.0.1-SNAPSHOT.jar"
+          asset_path: "target/Revival-1.0.0.jar"
+          asset_name: "Revival-1.0.0.jar"
           asset_content_type: "application/java-archive"

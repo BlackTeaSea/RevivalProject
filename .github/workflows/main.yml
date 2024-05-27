@@ -28,9 +28,9 @@ jobs:
     - name: Just for Fun an LS
       run: ls -al target
     - name: Set Executable Permissions
-      run: chmod +x target/Revival-1.0.1-SNAPSHOT.jar
+      run: chmod +x target/Revival-1.0.0.jar
     - name: Upload Artifact
       uses: actions/upload-artifact@v4
       with:
         name: Revival
-        path: target/Revival-1.0.1-SNAPSHOT.jar
+        path: target/Revival-1.0.0.jar
