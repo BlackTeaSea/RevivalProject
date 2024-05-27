@@ -41,11 +41,11 @@ public class Recipe {
         recipe.shape ("NTN",
                 "RXR",
                 "NBN");
-        recipe.setIngredient('X', Material.END_CRYSTAL);
-        recipe.setIngredient('N', Material.NETHERITE_INGOT);
+        recipe.setIngredient('X', Material.TOTEM_OF_UNDYING);
+        recipe.setIngredient('N', Material.NETHERITE_SCRAP;
         recipe.setIngredient('R', Material.ROTTEN_FLESH);
-        recipe.setIngredient('T', Material.TOTEM_OF_UNDYING);
-        recipe.setIngredient('B', Material.EXPERIENCE_BOTTLE);
+        recipe.setIngredient('T', Material.BLAZE_POWDER);
+        recipe.setIngredient('B', Material.ENDER_EYE);
 
         return recipe;
     }
